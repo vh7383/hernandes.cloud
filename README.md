@@ -31,3 +31,9 @@ Voir le workflow `.github/workflows/deploy.yml` — build Docker multi-arch (arm
 
 - [`docs/architecture.md`](./docs/architecture.md) — schéma des machines impliquées (Pi/Desktop/Kali) et des flux (chatbot, monitoring, réveil/veille).
 - [`docs/decisions.md`](./docs/decisions.md) — journal des décisions structurantes prises pendant la construction.
+
+## À activer avant mise en prod
+
+- `scripts/desktop-sleep-watcher.ps1` est écrit et testé en dry-run, mais **pas encore enregistré comme tâche planifiée Windows récurrente** — laissé en réserve tant que le site n'est pas réellement déployé (l'URL `hernandes.cloud/api/activity` qu'il interroge n'existe pas encore en prod). À activer via `Register-ScheduledTask` une fois le déploiement fait.
+- Instance Ollama isolée dédiée à AlicIA-lite sur le Desktop : pas encore montée (cf. `docs/decisions.md`).
+- Clé SSH dédiée Pi→Kali : générée et déployée (restreinte à `systemctl suspend`), mais le chemin exact (`KALI_SSH_KEY_PATH`) doit être confirmé/monté dans le conteneur au déploiement.
