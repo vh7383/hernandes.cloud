@@ -30,6 +30,9 @@ export const projects: Project[] = [
     description:
       "Lab IA personnel : agent local (OpenClaw + Ollama) exploré en observabilité avant fiabilité — un terrain d'expérimentation, pas un produit.",
     stack: ["Ollama", "OpenClaw", "Self-hosting"],
+    links: {
+      board: "https://sharing.clickup.com/90121874429/l/h/6-901219337586-1/c872c825dc3b934",
+    },
     status: "active",
   },
 ];
