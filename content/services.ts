@@ -48,56 +48,58 @@ export const services: ServiceTarget[] = [
     group: "pi",
   },
 
-  // --- NAS Synology (DS218play) --- URLs par alias du portail d'applications
-  // DSM. Seuls `cam` et `photo` avaient déjà un alias configuré au moment de
-  // l'écriture ; les autres sous-domaines doivent être ajoutés côté DSM
-  // (Panneau de configuration > Portail de connexion > Applications) pour
-  // que ces liens fonctionnent réellement.
+  // --- NAS Synology (DS218play) --- alias + ports HTTPS configurés dans le
+  // portail d'applications DSM (Panneau de configuration > Portail de
+  // connexion > Applications), confirmés joignables depuis l'extérieur le
+  // 2026-07-06. Le certificat TLS présenté est encore celui par défaut du NAS
+  // (pas le certificat partagé avec le Pi) — cf. docs/decisions.md — donc ces
+  // services peuvent apparaître "indisponible" côté /monitoring tant que ce
+  // n'est pas resynchronisé, même si les URLs répondent réellement.
   {
     name: "photos",
-    url: "https://photo.hernandes.cloud",
+    url: "https://photo.hernandes.cloud:5443",
     publicLabel: "Photos",
     logo: "/images/synology/photos.svg",
     group: "nas",
   },
   {
     name: "surveillance",
-    url: "https://cam.hernandes.cloud",
+    url: "https://cam.hernandes.cloud:9901",
     publicLabel: "Vidéosurveillance",
     logo: "/images/synology/surveillance.svg",
     group: "nas",
   },
   {
     name: "synology-drive",
-    url: "https://syno-drive.hernandes.cloud",
+    url: "https://syno-drive.hernandes.cloud:10003",
     publicLabel: "Synology Drive",
     logo: "/images/synology/synology-drive.svg",
     group: "nas",
   },
   {
     name: "file-station",
-    url: "https://files.hernandes.cloud",
+    url: "https://file.hernandes.cloud:7001",
     publicLabel: "File Station",
     logo: "/images/synology/file-station.svg",
     group: "nas",
   },
   {
     name: "note-station",
-    url: "https://notes.hernandes.cloud",
+    url: "https://note.hernandes.cloud:9351",
     publicLabel: "Note Station",
     logo: "/images/synology/note-station.svg",
     group: "nas",
   },
   {
     name: "audio-station",
-    url: "https://audio.hernandes.cloud",
+    url: "https://audio.hernandes.cloud:8801",
     publicLabel: "Audio Station",
     logo: "/images/synology/audio-station.svg",
     group: "nas",
   },
   {
     name: "contacts",
-    url: "https://contacts.hernandes.cloud",
+    url: "https://contacts.hernandes.cloud:25556",
     publicLabel: "Contacts",
     logo: "/images/synology/contacts.svg",
     group: "nas",
@@ -108,5 +110,6 @@ export const services: ServiceTarget[] = [
     publicLabel: "DSM",
     logo: "/images/synology/dsm.svg",
     group: "nas",
+    comingSoon: true,
   },
 ];
