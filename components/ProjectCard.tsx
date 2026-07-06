@@ -44,6 +44,16 @@ export default function ProjectCard({ project }: { project: Project }) {
             Suivi du projet ↗
           </a>
         )}
+        {project.links?.demo && (
+          <a
+            href={project.links.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-brand hover:underline"
+          >
+            Voir le site ↗
+          </a>
+        )}
       </div>
     </article>
   );

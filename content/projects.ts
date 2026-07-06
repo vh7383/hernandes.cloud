@@ -51,4 +51,13 @@ export const projects: Project[] = [
     stack: ["OpenTripPlanner", "GDAL", "GTFS", "OSM", "Java", "Systemd"],
     status: "archived",
   },
+  {
+    slug: "osi-water-watch",
+    title: "OSI Water Watch",
+    description:
+      "Application web pour la base de données scientifique du programme de sciences participatives OSI Water Watch (Objectif Sciences International) : collecte de données de qualité de l'eau, intégration MariaDB, collaboration avec chercheurs et équipe technique.",
+    stack: ["JavaScript", "MariaDB"],
+    links: { demo: "https://www.osi-water-watch.org/" },
+    status: "archived",
+  },
 ];
