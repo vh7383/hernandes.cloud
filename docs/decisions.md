@@ -49,3 +49,24 @@ Ajout de tous les services visibles dans le portail d'applications DSM (Photos, 
 
 - Fix nginx : `hernandes.cloud` déclaré `default_server` explicite pour le 443 (plutôt que de simplement retirer le wildcard) — sans ça, le vrai repli aurait été le premier bloc 443 chargé par nginx, probablement Nextcloud (`drive.hernandes.cloud`), un comportement moins prévisible que l'existant.
 - Fix applicatif : premier essai avec un check générique `x-powered-by: Next.js` — écarté après test réel, `plex.tv` (service externe, pas le nôtre) envoie aussi ce header, ce qui aurait fait passer Plex à tort en "indisponible" (faux négatif). Remplacé par un header propre à ce déploiement précis (`X-Site-Id: hernandes-cloud-self`, injecté via `next.config.ts` → `headers()`), vérifié par `lib/status.ts`.
+
+## 2026-07-06 — Suivi de projet ClickUp : liste dédiée + lien public en instantané
+
+Une liste **hernandes.cloud** créée dans ClickUp (dossier "Projets"), avec un workflow à 4 statuts (Backlog → À faire → En cours → Terminé) — les statuts par défaut de l'espace ne suffisaient pas pour une gestion "classique". Une liste équivalente créée pour **AlicIA**, alimentée depuis son propre journal d'incidents (`ALICIA_CONTEXT.md`).
+
+Limite technique actée : l'intégration MCP ClickUp ne permet pas de créer/nommer des statuts personnalisés par API — uniquement de déplacer des tâches entre statuts existants. Toute la configuration des statuts s'est faite à la main côté UI (plusieurs allers-retours avant d'obtenir une liste propre : les premiers essais ont mélangé statuts d'espace et de liste, ou parasité par un template ClickUp "Portfolio" inadapté — repris de zéro).
+
+Partage public : ClickUp (sur ce plan) ne permet qu'un **instantané** figé, pas une vue live synchronisée. Accepté comme suffisant pour l'instant. Les deux liens (hernandes.cloud, AlicIA) sont exposés sur `/projects`, à côté du lien "Voir le code" — `Project.links.board` dans `content/projects.ts`.
+
+## 2026-07-06 — Projets professionnels ajoutés après revue de confidentialité
+
+Vincent a retrouvé les archives de deux projets menés chez un précédent employeur (infra on-premise pour un client, POC OpenTripPlanner pour un autre) et voulait les valoriser sur le site.
+
+**Revue effectuée avant toute publication** : les deux dépôts (avec historique git complet) ont été extraits et inspectés. Trouvailles :
+- Une liste de sources de sauvegarde contenant les **noms réels de 13 employés du client**.
+- L'**historique git** révélait le nom d'un collègue (auteur de commits) et l'URL interne du GitLab de l'employeur.
+- Un fichier `README.md` du second projet portait une mention `© <client> - Toute reproduction... soumise à autorisation` — ajoutée par Vincent lui-même à l'époque ("pour faire pro"), sans qu'une autorisation de publication n'ait jamais été réellement discutée avec son ancien manager.
+
+**Décision** : ne publier ni le code, ni l'historique git, ni les noms de clients. Les deux projets apparaissent sur `/projects` sous forme de cartes descriptives génériques (secteur anonymisé : "PME", "entreprise de mobilité"), sans lien vers un dépôt — seulement stack technique et description du rôle. Principe retenu : en cas de doute non tranché sur l'autorisation de publier le travail d'un tiers (client, employeur), on **anonymise et on ne montre pas le code**, plutôt que d'attendre une clarification qui n'a pas de date.
+
+Un troisième projet (OSI Water Watch, développé pour l'ONG Objectif Sciences International) a pu être ajouté avec un **lien direct vers le site public** (`Project.links.demo`, rendu "Voir le site ↗") : le site est déjà public, donc aucune question de confidentialité ne se posait.
