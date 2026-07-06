@@ -1,0 +1,17 @@
+# Déployé sur le Pi dans /opt/hernandes-cloud/ (à créer au premier déploiement).
+# `.env` (non commité) fournit les secrets/URLs runtime — voir .env.example.
+services:
+  web:
+    image: ghcr.io/vh7383/hernandes.cloud:latest
+    container_name: hernandes-cloud-web
+    restart: unless-stopped
+    # 127.0.0.1 uniquement : seul nginx doit atteindre ce port, jamais internet
+    # directement. 3001 car 3000 est déjà pris par Grafana sur ce Pi.
+    ports:
+      - "127.0.0.1:3001:3000"
+    env_file:
+      - .env
+    volumes:
+      # Clé dédiée Pi -> Kali (restreinte à `systemctl suspend` côté Kali,
+      # cf. docs/decisions.md). Montée en lecture seule, jamais dans l'image.
+      - ${HOME}/.ssh/id_ed25519_kali:/root/.ssh/id_ed25519_kali:ro
