@@ -35,7 +35,7 @@ export const services: ServiceTarget[] = [
   },
   {
     name: "plex",
-    url: "https://plex.tv",
+    url: "http://hernandes.cloud:32400/web",
     publicLabel: "Plex",
     logo: "/images/plex_logo_resized.jpeg",
     group: "pi",
