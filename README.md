@@ -32,8 +32,13 @@ Voir le workflow `.github/workflows/deploy.yml` — build Docker multi-arch (arm
 - [`docs/architecture.md`](./docs/architecture.md) — schéma des machines impliquées (Pi/Desktop/Kali) et des flux (chatbot, monitoring, réveil/veille).
 - [`docs/decisions.md`](./docs/decisions.md) — journal des décisions structurantes prises pendant la construction.
 
-## À activer avant mise en prod
+## État de production
 
-- `scripts/desktop-sleep-watcher.ps1` est écrit et testé en dry-run, mais **pas encore enregistré comme tâche planifiée Windows récurrente** — laissé en réserve tant que le site n'est pas réellement déployé (l'URL `hernandes.cloud/api/activity` qu'il interroge n'existe pas encore en prod). À activer via `Register-ScheduledTask` une fois le déploiement fait.
-- Instance Ollama isolée dédiée à AlicIA-lite sur le Desktop : pas encore montée (cf. `docs/decisions.md`).
-- Clé SSH dédiée Pi→Kali : générée et déployée (restreinte à `systemctl suspend`), mais le chemin exact (`KALI_SSH_KEY_PATH`) doit être confirmé/monté dans le conteneur au déploiement.
+Déployé et en ligne sur `hernandes.cloud` (Pi, reverse proxy nginx → conteneur `127.0.0.1:3001`) depuis le 2026-07-06. Pipeline CI/CD GitHub Actions fonctionnel (build arm64 → `ghcr.io` → déploiement SSH). `/var/www/html` (ancien site statique) conservé intact en fallback, non nettoyé pour l'instant.
+
+## Reste à faire
+
+- `scripts/desktop-sleep-watcher.ps1` est écrit et testé en dry-run, mais **pas encore enregistré comme tâche planifiée Windows récurrente** — laissé en réserve à la demande de Vincent. L'URL `hernandes.cloud/api/activity` qu'il interroge fonctionne maintenant réellement en prod ; à activer via `Register-ScheduledTask` quand souhaité.
+- Instance Ollama isolée dédiée à AlicIA-lite sur le Desktop : pas encore montée (cf. `docs/decisions.md`) — `/api/chat` réveille le Desktop mais l'appel LLM échouera tant que ce service n'existe pas.
+- Dashboard Kibana/Grafana public curé et anonymisé pour `NEXT_PUBLIC_MONITORING_EMBED_URL` : pas encore configuré.
+- Nettoyage de `/var/www/html` sur le Pi, une fois la confiance établie dans le nouveau déploiement.

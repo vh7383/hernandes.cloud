@@ -31,3 +31,12 @@ Cause probable : la Freebox (routeur) ne relaie pas fiablement les trames broadc
 **Décision** : abandon du réveil automatique pour Kali. Le réveil Wake-on-LAN automatisé (`lib/wol.ts`, déclenché depuis le Pi) ne concerne que le **Desktop** (Ethernet filaire, réveil confirmé fonctionnel au niveau pilote — cf. `powercfg /devicequery wake_armed`). Pour Kali/Elastic, `/monitoring` affiche un état "indisponible" quand la machine dort ; Vincent la réveille manuellement quand il veut la montrer (ex. démo à un employeur). Le mécanisme de veille via SSH (`systemctl suspend` déclenché par le Pi, cf. décision "Mécanisme de veille asymétrique") reste inchangé — seul le réveil automatique est abandonné.
 
 **Retest (même jour)** : Kali rapprochée physiquement de la Freebox (signal Wi-Fi fort) puis re-suspendue avec le hook WoWLAN réarmé — toujours aucun réveil après un magic packet (88s d'attente). Écarte l'hypothèse d'un signal Wi-Fi faible ; confirme que la cause est bien côté Freebox/driver, pas la portée radio. Décision d'abandon maintenue définitivement.
+
+## 2026-07-06 — Premier déploiement en production réussi
+
+Bascule complète effectuée le jour même :
+- Nouvelle clé SSH dédiée GitHub Actions → Pi, restreinte via `command=` à `/opt/hernandes-cloud/deploy.sh` uniquement (jamais de shell libre), suivant le même principe que la clé Pi → Kali.
+- Package `ghcr.io/vh7383/hernandes.cloud` rendu public (cohérent avec le repo déjà public) pour éviter de gérer un credential de pull supplémentaire sur le Pi.
+- Deux incidents réseau résolus en cours de route : la redirection de port externe 22 → Pi n'était plus active sur la Freebox (réactivée par Vincent) ; une première entrée `authorized_keys` mal échappée (guillemets cassés par le passage PowerShell → SSH) a été corrigée en transférant la ligne en base64 pour éviter tout problème d'échappement multi-couches.
+- nginx basculé de `root /var/www/html` (statique) vers un reverse proxy `proxy_pass http://127.0.0.1:3001` — avec `X-Forwarded-For`/`X-Real-IP` transmis (nécessaire pour que le rate limiting par IP, cf. `lib/rateLimit.ts`, voie les vraies IP visiteurs et non `127.0.0.1`). Ancienne config sauvegardée (`hernandes.cloud.bak-*`), `/var/www/html` conservé intact en fallback, non nettoyé pour l'instant.
+- Vérifié après bascule : site principal, `/monitoring` (services réels en ligne détectés), API routes, et absence d'impact sur les autres sous-domaines (`stats.hernandes.cloud` testé, inchangé).
