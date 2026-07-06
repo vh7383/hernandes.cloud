@@ -23,16 +23,28 @@ export default function ProjectCard({ project }: { project: Project }) {
           </li>
         ))}
       </ul>
-      {project.links?.repo && (
-        <a
-          href={project.links.repo}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-1 text-sm font-medium text-brand hover:underline"
-        >
-          Voir le code ↗
-        </a>
-      )}
+      <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+        {project.links?.repo && (
+          <a
+            href={project.links.repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-brand hover:underline"
+          >
+            Voir le code ↗
+          </a>
+        )}
+        {project.links?.board && (
+          <a
+            href={project.links.board}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-brand hover:underline"
+          >
+            Suivi du projet ↗
+          </a>
+        )}
+      </div>
     </article>
   );
 }

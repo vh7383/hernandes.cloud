@@ -7,7 +7,7 @@ export interface Project {
   title: string;
   description: string;
   stack: string[];
-  links?: { repo?: string; demo?: string };
+  links?: { repo?: string; demo?: string; board?: string };
   status: "active" | "archived" | "idea";
 }
 
@@ -18,7 +18,10 @@ export const projects: Project[] = [
     description:
       "Ce site lui-même : refonte complète en Next.js/React, avec chatbot maison et monitoring public, déployé sur mon propre Raspberry Pi.",
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Docker"],
-    links: { repo: "https://github.com/vh7383/hernandes.cloud" },
+    links: {
+      repo: "https://github.com/vh7383/hernandes.cloud",
+      board: "https://sharing.clickup.com/90121874429/l/h/6-901219336964-1/1d5bec3cbf05a0f",
+    },
     status: "active",
   },
   {
