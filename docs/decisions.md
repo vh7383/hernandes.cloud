@@ -21,3 +21,11 @@ Le découpage en tâches n'est pas géré dans un TODO du repo mais dans ClickUp
 ## 2026-07-06 — Next.js 16 / React 19 (au lieu d'une version antérieure ciblée dans le plan initial)
 
 Le scaffold (`create-next-app@latest`) a installé Next.js 16, plus récent qu'anticipé au moment du plan. Différences notables actées : Turbopack par défaut (plus besoin du flag `--turbopack`), Tailwind v4 configuré nativement en CSS (`@theme` dans `globals.css`, pas de `tailwind.config.ts`), et un nouveau modèle expérimental "Cache Components" qu'on n'active pas (on reste sur le comportement de cache standard, plus proche de ce qui était prévu dans le plan).
+
+## 2026-07-06 — Abandon du réveil automatique de Kali (Wake-on-Wireless-LAN)
+
+Kali n'a qu'une interface Wi-Fi (pas d'Ethernet filaire disponible). Test réel effectué : le chipset supporte bien le trigger `wake up on magic packet` (confirmé via `iw phy wowlan`), un hook systemd (`/usr/lib/systemd/system-sleep/enable-wowlan.sh`) arme correctement le WoWLAN avant chaque veille, et les logs confirment que `wpa_supplicant` préserve l'association Wi-Fi pendant la veille au lieu de déconnecter (`Do not deauthenticate ... since WoWLAN is enabled`). Malgré cette configuration correcte côté machine, un magic packet envoyé pendant la fenêtre de veille (~5 minutes) n'a pas réveillé la machine — réveil obtenu uniquement par bouton d'alimentation manuel.
+
+Cause probable : la Freebox (routeur) ne relaie pas fiablement les trames broadcast/multicast vers un client Wi-Fi en économie d'énergie (comportement connu, variable selon les box/firmwares) — hors de portée d'un fix côté Kali.
+
+**Décision** : abandon du réveil automatique pour Kali. Le réveil Wake-on-LAN automatisé (`lib/wol.ts`, déclenché depuis le Pi) ne concerne que le **Desktop** (Ethernet filaire, réveil confirmé fonctionnel au niveau pilote — cf. `powercfg /devicequery wake_armed`). Pour Kali/Elastic, `/monitoring` affiche un état "indisponible" quand la machine dort ; Vincent la réveille manuellement quand il veut la montrer (ex. démo à un employeur). Le mécanisme de veille via SSH (`systemctl suspend` déclenché par le Pi, cf. décision "Mécanisme de veille asymétrique") reste inchangé — seul le réveil automatique est abandonné.

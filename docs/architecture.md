@@ -22,21 +22,23 @@
       └───────────────┘           └───────────────┘
 ```
 
-Le Pi héberge l'application Next.js (site, API routes) et reste toujours allumé. Desktop et Kali hébergent respectivement le backend du chatbot et Elastic, mais restent éteints/en veille par défaut pour limiter la consommation électrique — ils sont réveillés à la demande.
+Le Pi héberge l'application Next.js (site, API routes) et reste toujours allumé. Desktop héberge le backend du chatbot et reste éteint/en veille par défaut pour limiter la consommation électrique — il est réveillé à la demande (Wake-on-LAN filaire, confirmé fonctionnel). Kali héberge Elastic mais **n'est pas réveillée automatiquement** (voir note ci-dessous) : elle est allumée manuellement par Vincent quand le monitoring doit être montré.
 
-## Flux réveil (Wake-on-LAN)
+## Flux réveil (Wake-on-LAN) — Desktop uniquement
 
-1. Un visiteur envoie un message au chatbot (ou consulte `/monitoring`).
-2. L'API route côté Pi (`/api/chat` ou `/api/status`) vérifie si la machine cible répond sur son port de service.
-3. Si non : envoi d'un magic packet UDP (broadcast LAN, `lib/wol.ts`) vers la MAC de la cible.
+1. Un visiteur envoie un message au chatbot.
+2. L'API route côté Pi (`/api/chat`) vérifie si le Desktop répond sur son port de service.
+3. Si non : envoi d'un magic packet UDP (broadcast LAN, `lib/wol.ts`) vers la MAC du Desktop.
 4. Polling du port de service (pas un simple ping) jusqu'à réponse ou timeout (~90s).
 5. Le visiteur voit un indicateur "réveil en cours" pendant l'attente.
 
 Ce sens de communication (Pi → cible) ne nécessite aucun credential : un magic packet est un datagramme UDP non authentifié, seul le LAN doit être partagé.
 
+**Kali n'a pas ce flux.** Elle n'a qu'une interface Wi-Fi ; un test réel (WoWLAN correctement armé côté machine, association Wi-Fi préservée pendant la veille) n'a quand même pas permis de la réveiller à distance — cause probable : la Freebox ne relaie pas fiablement les trames broadcast vers un client Wi-Fi endormi. Voir `docs/decisions.md` (2026-07-06) pour le détail du diagnostic. `/monitoring` affiche donc un état "indisponible" quand Kali dort, sans tentative de réveil.
+
 ## Flux remise en veille — asymétrique par design
 
-- **Kali** : machine dédiée, pas d'usage interactif concurrent. Le Pi peut se connecter en SSH et déclencher `systemctl suspend` après N minutes sans requête.
+- **Kali** : machine dédiée, pas d'usage interactif concurrent. Le Pi peut se connecter en SSH et déclencher `systemctl suspend` après N minutes sans requête. (La remise en veille automatique fonctionne ; seul le réveil automatique a été abandonné.)
 - **Desktop** : PC interactif quotidien de Vincent — on ne laisse **pas** le Pi forcer une mise en veille à distance (pas de WinRM/exec entrant à ouvrir sur ce poste). À la place, un script local sur le Desktop interroge périodiquement `GET /api/activity` (dernière requête site) et son propre idle time local (souris/clavier, `GetLastInputInfo`). Il ne s'endort que si les deux conditions d'inactivité sont réunies — un seul sens de communication (Desktop → Pi), jamais l'inverse.
 
 ## AlicIA-lite vs AlicIA
