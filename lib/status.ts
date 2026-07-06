@@ -19,6 +19,19 @@ async function fetchWithTimeout(url: string, method: "HEAD" | "GET", timeoutMs =
   }
 }
 
+/**
+ * Un sous-domaine hernandes.cloud pas encore configuré côté cible réelle
+ * (alias DSM manquant, DNS absent, etc.) peut atterrir sur notre propre site
+ * via le `default_server` nginx (cf. docs/decisions.md) au lieu d'échouer —
+ * faux "en ligne" sinon. On détecte ça via un header propre à CE déploiement
+ * (`X-Site-Id`, cf. next.config.ts) — pas `x-powered-by: Next.js` seul, qui
+ * donne un faux négatif sur des services externes qui tournent eux-mêmes sur
+ * Next.js (constaté en réel : plex.tv envoie ce header aussi).
+ */
+function looksLikeOurOwnSite(res: Response): boolean {
+  return res.headers.get("x-site-id") === "hernandes-cloud-self";
+}
+
 async function checkService(service: ServiceTarget): Promise<ServiceStatus> {
   if (service.comingSoon || !service.url) {
     return { name: service.name, publicLabel: service.publicLabel, status: "unknown" };
@@ -27,11 +40,13 @@ async function checkService(service: ServiceTarget): Promise<ServiceStatus> {
   try {
     // HEAD d'abord ; certains services mal configurés y répondent mal, d'où le fallback GET.
     const res = await fetchWithTimeout(service.url, "HEAD");
-    return { name: service.name, publicLabel: service.publicLabel, status: res.status < 500 ? "up" : "down" };
+    const up = res.status < 500 && !looksLikeOurOwnSite(res);
+    return { name: service.name, publicLabel: service.publicLabel, status: up ? "up" : "down" };
   } catch {
     try {
       const res = await fetchWithTimeout(service.url, "GET");
-      return { name: service.name, publicLabel: service.publicLabel, status: res.status < 500 ? "up" : "down" };
+      const up = res.status < 500 && !looksLikeOurOwnSite(res);
+      return { name: service.name, publicLabel: service.publicLabel, status: up ? "up" : "down" };
     } catch {
       return { name: service.name, publicLabel: service.publicLabel, status: "down" };
     }

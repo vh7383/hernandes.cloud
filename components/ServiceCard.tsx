@@ -20,7 +20,7 @@ export default function ServiceCard({ service }: { service: ServiceTarget }) {
       rel="noopener noreferrer"
       className="flex flex-col items-center gap-3 rounded-lg border border-border bg-surface p-6 text-center transition-colors hover:border-brand"
     >
-      {service.logo && (
+      {service.logo ? (
         <Image
           src={service.logo}
           alt={`Logo ${service.publicLabel}`}
@@ -28,6 +28,11 @@ export default function ServiceCard({ service }: { service: ServiceTarget }) {
           height={48}
           className="h-12 w-12 object-contain"
         />
+      ) : (
+        // Repli le temps d'avoir un vrai logo, cf. docs/decisions.md
+        <span className="flex h-12 w-12 items-center justify-center text-2xl" aria-hidden="true">
+          {service.icon ?? "🔗"}
+        </span>
       )}
       <span className="text-sm font-medium">{service.publicLabel}</span>
     </a>

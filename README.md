@@ -42,3 +42,5 @@ Déployé et en ligne sur `hernandes.cloud` (Pi, reverse proxy nginx → contene
 - Instance Ollama isolée dédiée à AlicIA-lite sur le Desktop : pas encore montée (cf. `docs/decisions.md`) — `/api/chat` réveille le Desktop mais l'appel LLM échouera tant que ce service n'existe pas.
 - Dashboard Kibana/Grafana public curé et anonymisé pour `NEXT_PUBLIC_MONITORING_EMBED_URL` : pas encore configuré.
 - Nettoyage de `/var/www/html` sur le Pi, une fois la confiance établie dans le nouveau déploiement.
+- Alias DSM à configurer (Panneau de configuration > Portail de connexion > Applications) pour que les nouveaux sous-domaines NAS pointent réellement vers les bons services : `audio`, `contacts`, `files`, `notes`, `syno-drive`, `nas` (`cam` et `photo` existaient déjà). Tant que non fait, `/monitoring` les affichera correctement en "indisponible" (cf. `docs/decisions.md`).
+- Vrais logos pour les services NAS (actuellement des icônes emoji de repli) — à déposer dans `public/images/` puis référencer via le champ `logo` de `content/services.ts`.
