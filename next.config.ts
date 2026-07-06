@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
   // autonome + node_modules minimal), voir docs/architecture.md.
   output: "standalone",
 
+  // Autorise next/image à optimiser les SVG (bloqué par défaut, risque XSS
+  // sur du SVG non maîtrisé) — les nôtres sont écrits par nous, dans public/,
+  // pas des uploads utilisateur.
+  images: {
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+
   // Marqueur pour lib/status.ts : distingue "on a vraiment atteint ce
   // service" de "on a rebondi sur notre propre app via le default_server
   // nginx" (cf. docs/decisions.md). Un simple header `x-powered-by: Next.js`
