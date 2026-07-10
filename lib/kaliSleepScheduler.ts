@@ -7,7 +7,6 @@ import { wakeTargets } from "@/lib/wakeTargets";
 const execFileAsync = promisify(execFile);
 
 const CHECK_INTERVAL_MS = 5 * 60 * 1000;
-// Cohérent avec le seuil du script Desktop (scripts/desktop-sleep-watcher.ps1).
 const IDLE_THRESHOLD_MS = 15 * 60 * 1000;
 
 // La clé dédiée Pi -> Kali (restreinte à `systemctl suspend` côté Kali, cf.

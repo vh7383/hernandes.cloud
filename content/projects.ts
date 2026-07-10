@@ -7,8 +7,10 @@ export interface Project {
   title: string;
   description: string;
   stack: string[];
-  links?: { repo?: string; demo?: string; board?: string };
+  links?: { repo?: string; demo?: string; board?: string; page?: string };
   status: "active" | "archived" | "idea";
+  /** Logo/illustration optionnel, affiché en tête de carte (cf. ProjectCard.tsx). */
+  logo?: string;
 }
 
 export const projects: Project[] = [
@@ -20,19 +22,29 @@ export const projects: Project[] = [
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Docker"],
     links: {
       repo: "https://github.com/vh7383/hernandes.cloud",
-      board: "https://sharing.clickup.com/90121874429/l/h/6-901219336964-1/1d5bec3cbf05a0f",
+      board: "https://trello.com/b/fcf3lkjH/%F0%9F%A7%AA-refonte-wwwhernandescloud",
     },
     status: "active",
   },
   {
-    slug: "alicia",
-    title: "AlicIA",
+    slug: "labia",
+    title: "LabIA",
     description:
-      "Lab IA personnel : agent local (OpenClaw + Ollama) exploré en observabilité avant fiabilité — un terrain d'expérimentation, pas un produit.",
-    stack: ["Ollama", "OpenClaw", "Self-hosting"],
+      "Mon laboratoire IA personnel : une résidente (AlicIA, OpenClaw + Ollama, mon projet principal — identité, communication, expérimentation) et plusieurs assistants IA avec qui je collabore au quotidien. Travail en cours sur l'orchestration multi-agents (LangGraph) et la traçabilité (LangSmith).",
+    stack: ["Ollama", "OpenClaw", "LangGraph", "LangSmith", "Multi-agent"],
     links: {
-      board: "https://sharing.clickup.com/90121874429/l/h/6-901219337586-1/c872c825dc3b934",
+      page: "/labia",
+      board: "https://trello.com/b/oCFRPLk6/alicia-%F0%9F%A7%AA",
     },
+    status: "active",
+  },
+  {
+    slug: "infra-perso",
+    title: "Infrastructure personnelle auto-hébergée",
+    description:
+      "Raspberry Pi (24/7, reverse proxy + services), NAS Synology, Desktop et Kali réveillés à la demande : quatre machines, quatre rôles, une architecture pensée pour limiter la surface d'attaque plutôt que pour la simplicité.",
+    stack: ["Docker", "Nginx", "Synology DSM", "Wake-on-LAN", "SSH"],
+    links: { page: "/infra" },
     status: "active",
   },
   {
@@ -41,6 +53,14 @@ export const projects: Project[] = [
     description:
       "Conception et documentation d'une infrastructure on-premise pour une PME : sauvegardes chiffrées (Borg + snapshots Btrfs), VPN WireGuard, DNS interne, reverse proxy Nginx, hébergement Nextcloud et Odoo en conteneurs. Mission professionnelle réalisée en solo.",
     stack: ["Debian", "Docker", "Btrfs", "BorgBackup", "WireGuard", "Nginx", "Nextcloud", "Odoo"],
+    status: "archived",
+  },
+  {
+    slug: "wikilab",
+    title: "WikiLAB — plateforme documentaire interne",
+    description:
+      "Application web de gestion documentaire (pages, tutoriels, présentations) avec authentification par rôles (utilisateur, modérateur, administrateur) et modération de contenu. Réalisée en équipe chez Thales AVS dans le cadre de ma licence.",
+    stack: ["Angular", "Node.js", "Express", "MongoDB", "JWT"],
     status: "archived",
   },
   {

@@ -11,8 +11,6 @@ export interface ServiceTarget {
   icon?: string;
   /** Regroupement visuel sur /services (cf. app/services/page.tsx). */
   group: "pi" | "nas";
-  /** Si défini, ce service tourne sur une machine qu'il faut réveiller (WoL) avant de le ping. */
-  wakeTarget?: "desktop" | "kali";
   /** Services pas encore exposés publiquement. */
   comingSoon?: boolean;
 }

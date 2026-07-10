@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { experience } from "@/content/experience";
 
 export const metadata: Metadata = {
@@ -6,11 +7,13 @@ export const metadata: Metadata = {
 };
 
 const skillGroups: { label: string; skills: string[] }[] = [
-  { label: "Systèmes", skills: ["Linux (Debian)", "Windows Server"] },
-  { label: "Réseaux", skills: ["TCP/IP", "VPN WireGuard", "Routage", "Supervision"] },
-  { label: "DevOps / Infra", skills: ["Docker", "Git", "GitLab CI/CD", "Bash", "Python"] },
-  { label: "Outils", skills: ["Odoo", "ServiceNow", "WSUS", "ITCM"] },
-  { label: "Développement", skills: ["Python", "JavaScript", "SQL"] },
+  { label: "Systèmes", skills: ["Linux (Debian)", "Arch Linux", "Windows Server", "WSL2", "Virtualisation / conteneurs", "IBM AS/400"] },
+  { label: "Réseaux", skills: ["TCP/IP", "Routage", "VPN WireGuard", "Reverse proxy (Nginx)", "Split-DNS", "HTTPS/HSTS"] },
+  { label: "DevOps", skills: ["Docker", "Ansible", "Git", "GitLab CI/CD", "Bash", "Python"] },
+  { label: "Supervision & observabilité", skills: ["PLG (Prometheus/Loki/Grafana)", "ELK (Elasticsearch/Logstash/Kibana)", "ServiceNow (ITSM)"] },
+  { label: "IA / LLM", skills: ["Inférence locale (Ollama)", "Agents & tool use", "RAG", "MCP", "Prompt engineering"] },
+  { label: "Développement", skills: ["Python", "Java", "C", "Ada", "JavaScript / Angular", "JavaScript / React", "SQL (MariaDB)"] },
+  { label: "Outils", skills: ["Odoo", "ServiceNow", "WSUS", "ITCM", "ITIL Foundation"] },
 ];
 
 const formation = [
@@ -22,28 +25,39 @@ const formation = [
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-3xl font-bold tracking-tight">À propos de moi</h1>
+      <div className="flex items-center gap-5">
+        <Image
+          src="/images/vincent-avatar.jpg"
+          alt="Photo de Vincent Hernandes"
+          width={96}
+          height={96}
+          className="h-24 w-24 shrink-0 rounded-full object-cover"
+        />
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">À propos de moi</h1>
+        </div>
+      </div>
       <p className="mt-4 text-foreground/70">
-        Je m&apos;appelle Vincent Hernandes — Administrateur Systèmes &amp;
-        Réseaux, ingénierie logicielle &amp; DevOps. Basé à Toulouse.
+        Je m&apos;appelle Vincent Hernandes — Ingénieur Infrastructure &amp;
+        DevOps. Basé à Toulouse, ouvert à la mobilité internationale.
         N&apos;hésitez pas à me contacter pour échanger ou collaborer !
       </p>
 
       <section className="mt-10">
         <h2 className="text-xl font-semibold">Qui suis-je ?</h2>
         <p className="mt-3 text-foreground/70">
-          Administrateur systèmes &amp; réseaux avec une forte composante
-          ingénierie logicielle et DevOps. Expérience en environnement
-          industriel (Thales), en conception d&apos;architectures techniques,
-          en administration Linux/Docker/VPN, et en coordination
-          opérationnelle de projets clients. Habitué aux environnements
-          critiques, à la documentation, au suivi d&apos;avancement et à
-          l&apos;automatisation.
+          Ingénieur infrastructure en fin de cursus CNAM (niveau 7 CEC), venu
+          du terrain : 7 ans de progression du support N1 à la conception
+          d&apos;architectures et à la référence technique projets. Double
+          culture systèmes/réseaux et ingénierie logicielle, forgée en
+          environnement industriel critique (Thales) et en PME multi-clients.
+          Pratique quotidienne de l&apos;automatisation, de la documentation
+          et du self-hosting — dont un lab personnel d&apos;agents IA locaux,
+          ce site en étant la démonstration directe.
         </p>
         <p className="mt-3 text-foreground/70">
           Curieux et touche-à-tout, je m&apos;intéresse particulièrement au
-          self-hosting, à la cybersécurité et à l&apos;IA locale — ce site en
-          est d&apos;ailleurs une démonstration directe. J&apos;aime
+          self-hosting, à la cybersécurité et à l&apos;IA locale. J&apos;aime
           comprendre un système en profondeur avant de le configurer, plutôt
           que de m&apos;en remettre à une automatisation opaque.
         </p>
@@ -114,12 +128,54 @@ export default function AboutPage() {
 
       <section className="mt-10">
         <h2 className="text-xl font-semibold">En dehors du code</h2>
-        <p className="mt-3 text-foreground/70">
-          Depuis 2021, je suis moniteur bénévole à l&apos;école de voile des{" "}
-          <strong>Glénans</strong>, et depuis 2025 chauffeur-logisticien
-          bénévole aux <strong>Restos du Cœur</strong>. Côté loisirs : la
-          musique, la cuisine, la littérature, et les voyages — Vietnam, Asie,
-          montagne.
+        <div className="mt-3 space-y-4">
+          <div className="flex items-start gap-3">
+            <Image
+              src="/images/logos/glenans.svg"
+              alt="Logo Les Glénans"
+              width={40}
+              height={21}
+              className="mt-1 h-6 w-auto shrink-0"
+            />
+            <p className="text-foreground/70">
+              <a
+                href="https://www.glenans.asso.fr/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-foreground hover:text-brand"
+              >
+                Les Glénans ↗
+              </a>{" "}
+              — moniteur bénévole à l&apos;école de voile depuis 2021, et
+              membre du comité de secteur : j&apos;aide à faire vivre la base
+              et la communauté au quotidien.
+            </p>
+          </div>
+          <div className="flex items-start gap-3">
+            <Image
+              src="/images/logos/restos-du-coeur.svg"
+              alt="Logo Les Restos du Cœur"
+              width={32}
+              height={32}
+              className="mt-1 h-8 w-auto shrink-0"
+            />
+            <p className="text-foreground/70">
+              <a
+                href="https://www.restosducoeur.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-foreground hover:text-brand"
+              >
+                Les Restos du Cœur ↗
+              </a>{" "}
+              — chauffeur-logisticien bénévole depuis 2025 : je livre
+              essentiellement sur la zone départementale, parfois plus loin.
+            </p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm text-foreground/70">
+          Côté loisirs : la musique, la cuisine, la littérature, et les
+          voyages... le monde est un terrain de jeu !
         </p>
       </section>
 
@@ -130,7 +186,7 @@ export default function AboutPage() {
           simplement de discuter projets informatiques ?
         </p>
         <a
-          href="mailto:vincent.hernandes@protonmail.com"
+          href="mailto:vincent.hernandes@gmail.com"
           className="mt-4 inline-block rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
         >
           Me contacter

@@ -1,80 +1,30 @@
 "use client";
 
-import { useRef, useState } from "react";
-import WakingIndicator from "@/components/WakingIndicator";
+import { useState } from "react";
+import { GabrielleIcon } from "@/components/EntityIcons";
 
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
 }
 
-const POLL_INTERVAL_MS = 3000;
-const MAX_POLL_ATTEMPTS = 30; // ~90s, cf. docs/architecture.md
+type Phase = "idle" | "sending" | "error";
 
-type Phase = "idle" | "sending" | "waking" | "error";
+const GREETING =
+  "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir — un petit modèle local, pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
 
 export default function ChatWidget() {
-  const [open, setOpen] = useState(false);
+  // Se déploie directement à l'arrivée sur le site — cf. docs/decisions.md.
+  const [open, setOpen] = useState(true);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
-  const [wakingElapsed, setWakingElapsed] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-
-  // Incrémenté à chaque nouvel envoi : si l'utilisateur relance un message
-  // pendant qu'on attend le réveil du précédent, ce garde-fou arrête la
-  // boucle de polling obsolète au lieu de laisser deux boucles tourner.
-  const requestIdRef = useRef(0);
-
-  async function callChatApi(payloadMessages: ChatMessage[]) {
-    return fetch("/api/chat", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ messages: payloadMessages }),
-    });
-  }
-
-  async function pollUntilAwake(payloadMessages: ChatMessage[], requestId: number) {
-    for (let attempt = 1; attempt <= MAX_POLL_ATTEMPTS; attempt++) {
-      if (requestId !== requestIdRef.current) return; // une requête plus récente a pris le relais
-
-      await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
-      if (requestId !== requestIdRef.current) return;
-
-      setWakingElapsed(attempt * (POLL_INTERVAL_MS / 1000));
-
-      const response = await callChatApi(payloadMessages);
-      if (requestId !== requestIdRef.current) return;
-
-      if (response.status === 503) continue; // toujours en train de se réveiller
-
-      if (response.status === 429) {
-        setPhase("error");
-        setErrorMessage("Trop de tentatives, réessaie dans un instant.");
-        return;
-      }
-
-      if (!response.ok) {
-        setPhase("error");
-        setErrorMessage("AlicIA-lite n'a pas pu répondre.");
-        return;
-      }
-
-      const data = await response.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
-      setPhase("idle");
-      return;
-    }
-
-    setPhase("error");
-    setErrorMessage("La machine n'a pas répondu à temps — réessaie plus tard.");
-  }
 
   async function handleSend() {
     const text = input.trim();
-    if (!text || phase === "sending" || phase === "waking") return;
+    if (!text || phase === "sending") return;
 
-    const requestId = ++requestIdRef.current;
     const nextMessages: ChatMessage[] = [...messages, { role: "user", content: text }];
     setMessages(nextMessages);
     setInput("");
@@ -82,15 +32,11 @@ export default function ChatWidget() {
     setErrorMessage("");
 
     try {
-      const response = await callChatApi(nextMessages);
-      if (requestId !== requestIdRef.current) return;
-
-      if (response.status === 503) {
-        setPhase("waking");
-        setWakingElapsed(0);
-        await pollUntilAwake(nextMessages, requestId);
-        return;
-      }
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ messages: nextMessages }),
+      });
 
       if (response.status === 429) {
         setPhase("error");
@@ -100,7 +46,7 @@ export default function ChatWidget() {
 
       if (!response.ok) {
         setPhase("error");
-        setErrorMessage("AlicIA-lite n'a pas pu répondre.");
+        setErrorMessage("Gabrielle n'a pas pu répondre.");
         return;
       }
 
@@ -108,7 +54,6 @@ export default function ChatWidget() {
       setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
       setPhase("idle");
     } catch {
-      if (requestId !== requestIdRef.current) return;
       setPhase("error");
       setErrorMessage("Impossible de contacter le serveur.");
     }
@@ -119,7 +64,12 @@ export default function ChatWidget() {
       {open && (
         <div className="mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <span className="font-mono text-sm font-semibold text-brand">AlicIA-lite</span>
+            <span className="flex items-center gap-2">
+              <span className="h-6 w-6 shrink-0">
+                <GabrielleIcon />
+              </span>
+              <span className="font-mono text-sm font-semibold text-brand">Gabrielle</span>
+            </span>
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -132,10 +82,7 @@ export default function ChatWidget() {
 
           <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
             {messages.length === 0 && (
-              <p className="text-sm text-foreground/60">
-                Bonjour, je suis une version limitée d&apos;AlicIA — je peux parler du profil
-                et des projets de Vincent, sans accès à aucun outil réel.
-              </p>
+              <p className="text-sm text-foreground/60">{GREETING}</p>
             )}
             {messages.map((message, index) => (
               <div
@@ -149,7 +96,6 @@ export default function ChatWidget() {
                 {message.content}
               </div>
             ))}
-            {phase === "waking" && <WakingIndicator elapsedSeconds={wakingElapsed} />}
             {phase === "error" && (
               <p className="rounded-lg border border-dashed border-border px-3 py-2 text-sm text-foreground/70">
                 {errorMessage}
@@ -169,12 +115,12 @@ export default function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Écris un message..."
-              disabled={phase === "sending" || phase === "waking"}
+              disabled={phase === "sending"}
               className="flex-1 rounded-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand"
             />
             <button
               type="submit"
-              disabled={phase === "sending" || phase === "waking" || !input.trim()}
+              disabled={phase === "sending" || !input.trim()}
               className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
             >
               Envoyer
@@ -187,9 +133,9 @@ export default function ChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
-        aria-label={open ? "Fermer AlicIA-lite" : "Ouvrir AlicIA-lite"}
+        aria-label={open ? "Fermer Gabrielle" : "Ouvrir Gabrielle"}
       >
-        {open ? "✕" : "💬"}
+        {open ? "✕" : <span className="h-9 w-9"><GabrielleIcon /></span>}
       </button>
     </div>
   );
