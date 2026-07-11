@@ -77,7 +77,7 @@ export default function ChatWidget() {
         <div className="mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <span className="flex items-center gap-2">
-              <PersonaHUD persona="gabrielle" etat={etat} size={24} />
+              <PersonaHUD persona="gabrielle" etat={etat} size={32} showLabel />
               <span className="font-mono text-sm font-semibold text-brand">Gabrielle</span>
             </span>
             <button
@@ -145,7 +145,7 @@ export default function ChatWidget() {
         className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
         aria-label={open ? "Fermer Gabrielle" : "Ouvrir Gabrielle"}
       >
-        {open ? "✕" : <PersonaHUD persona="gabrielle" etat={etat} size={36} followMouse={false} />}
+        {open ? "✕" : <PersonaHUD persona="gabrielle" etat={etat} size={42} followMouse={false} />}
       </button>
     </div>
   );
