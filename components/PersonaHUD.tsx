@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 export type PersonaKey = "gabrielle" | "raphael" | "mickael";
 export type PersonaEtat = "idle" | "pense" | "parle" | "alerte";
@@ -74,9 +75,32 @@ export default function PersonaHUD({
   const sigilRef = useRef<HTMLDivElement>(null);
   const pupilRef = useRef<HTMLDivElement>(null);
   const [pupil, setPupil] = useState({ x: 0, y: 0 });
+  // Le vol est rendu via portail dans <body> (cf. JSX plus bas) pour
+  // échapper à l'overflow-hidden de la modale personae — sinon la
+  // silhouette est visuellement coupée dès qu'elle sort de la carte,
+  // au lieu de vraiment partir du bord de l'écran. `flightBox` porte sa
+  // position cible (calquée sur le HUD), mesurée avant peinture.
+  const [flightBox, setFlightBox] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
+
+  useLayoutEffect(() => {
+    if (!arrive) return;
+    const el = eyeRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const width = size * 1.1;
+    const height = size * 0.825;
+    setFlightBox({
+      left: r.left + r.width / 2 - width / 2,
+      top: r.top + r.height / 2 - height / 2,
+      width,
+      height,
+    });
+    // Ne mesure qu'au montage — cf. commentaire du prop `arrive`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    if (!arrive) return;
+    if (!arrive || !flightBox) return;
 
     // Phase 0 — vol : départ d'un bord d'écran aléatoire, trajectoire
     // courbe (wobble perpendiculaire), flip selon la direction, fusion
@@ -85,9 +109,8 @@ export default function PersonaHUD({
     let delay = 0;
     const flightEl = flightRef.current;
     if (flightEl) {
-      const r = flightEl.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
+      const cx = flightBox.left + flightBox.width / 2;
+      const cy = flightBox.top + flightBox.height / 2;
       const W = window.innerWidth;
       const H = window.innerHeight;
       const M = 180;
@@ -143,9 +166,9 @@ export default function PersonaHUD({
       ],
       { duration: 800, easing: "ease-out", delay, fill: "backwards" },
     );
-    // Ne joue qu'au montage — cf. commentaire du prop `arrive` ci-dessus.
+    // Ne joue qu'une fois flightBox mesuré — cf. useLayoutEffect ci-dessus.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [flightBox]);
 
   useEffect(() => {
     if (!followMouse) return;
@@ -205,23 +228,28 @@ export default function PersonaHUD({
             }}
           />
         )}
-        {arrive && (
-          // eslint-disable-next-line @next/next/no-img-element -- overlay anime via WAAPI (translate/rotate/scale), pas un <Image> layout classique.
-          <img
-            ref={flightRef}
-            src={VOL_SRC[persona]}
-            alt=""
-            style={{
-              position: "absolute",
-              width: size * 1.1,
-              height: size * 0.825,
-              opacity: 0,
-              pointerEvents: "none",
-              zIndex: 3,
-              willChange: "transform",
-            }}
-          />
-        )}
+        {arrive &&
+          flightBox &&
+          createPortal(
+            // eslint-disable-next-line @next/next/no-img-element -- overlay anime via WAAPI (translate/rotate/scale), pas un <Image> layout classique.
+            <img
+              ref={flightRef}
+              src={VOL_SRC[persona]}
+              alt=""
+              style={{
+                position: "fixed",
+                left: flightBox.left,
+                top: flightBox.top,
+                width: flightBox.width,
+                height: flightBox.height,
+                opacity: 0,
+                pointerEvents: "none",
+                zIndex: 60,
+                willChange: "transform",
+              }}
+            />,
+            document.body,
+          )}
         <div
           ref={sigilRef}
           style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
