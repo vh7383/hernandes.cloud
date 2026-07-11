@@ -197,7 +197,11 @@ export default function ChatWidget() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
+        className={
+          open
+            ? "flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
+            : "flex h-14 w-14 items-center justify-center rounded-full transition-transform hover:scale-105"
+        }
         aria-label={open ? "Fermer le chat" : `Ouvrir le chat avec ${PERSONA_NAMES[activePersona]}`}
       >
         {open ? "✕" : <PersonaHUD persona={activePersona} etat={etat} size={42} followMouse={false} />}
