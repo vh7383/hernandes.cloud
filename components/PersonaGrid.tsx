@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import PersonaHUD, { PERSONA_BUSTE_SRC, type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
+import PersonaHUD, {
+  PERSONA_SIGIL_SRC,
+  PERSONA_SILHOUETTE_SRC,
+  type PersonaEtat,
+  type PersonaKey,
+} from "@/components/PersonaHUD";
 
 // Cycle de démonstration des 4 états dans la modale, pour qu'on les voie
 // tous sans avoir besoin d'une vraie conversation avec Gabrielle.
@@ -84,7 +89,7 @@ export default function PersonaGrid() {
             className="group text-center"
           >
             <div className="mx-auto transition group-hover:scale-105">
-              <PersonaHUD persona={p.key} size={64} />
+              <Image src={PERSONA_SIGIL_SRC[p.key]} alt="" width={64} height={64} />
             </div>
             <p className="mt-2 text-sm font-medium group-hover:text-brand">{p.name}</p>
             <p className="mt-2 rounded-2xl rounded-b-none border border-border bg-surface px-3 py-2 text-xs text-foreground/70">
@@ -136,7 +141,7 @@ export default function PersonaGrid() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <Image
-                    src={PERSONA_BUSTE_SRC[active.key]}
+                    src={PERSONA_SILHOUETTE_SRC[active.key]}
                     alt=""
                     width={52}
                     height={39}
