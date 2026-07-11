@@ -6,17 +6,17 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    # Runner arm64 natif (le Pi cible est aarch64 — cf. docs/architecture.md).
+    # Avant : ubuntu-latest (x86_64) + QEMU pour le cross-build, mais QEMU
+    # plantait sur les binaires natifs de Next.js (SWC) : "qemu: uncaught
+    # target signal 4 (Illegal instruction)". Un runner nativement arm64
+    # élimine le problème et est aussi bien plus rapide (pas d'émulation).
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
-
-      # Le runner GitHub est x86_64, le Pi est arm64 (aarch64) — cf.
-      # docs/architecture.md. QEMU permet le cross-build.
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
