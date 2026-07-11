@@ -2,20 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import PersonaHUD, { type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
+import PersonaHUD, { PERSONA_BUSTE_SRC, type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
 
 // Cycle de démonstration des 4 états dans la modale, pour qu'on les voie
 // tous sans avoir besoin d'une vraie conversation avec Gabrielle.
 const ETAT_CYCLE: PersonaEtat[] = ["idle", "pense", "parle", "alerte"];
 const ETAT_CYCLE_MS = 2600;
-
-// Emblèmes fournis (assets/silhouette-*-buste.svg), jusque-là inutilisés —
-// petit avatar à côté du nom dans la modale.
-const AVATAR_SRC: Record<PersonaKey, string> = {
-  gabrielle: "/images/personae/assets/silhouette-gabrielle-buste.svg",
-  raphael: "/images/personae/assets/silhouette-raphael-buste.svg",
-  mickael: "/images/personae/assets/silhouette-mickael-buste.svg",
-};
 
 interface Persona {
   key: PersonaKey;
@@ -144,7 +136,7 @@ export default function PersonaGrid() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <Image
-                    src={AVATAR_SRC[active.key]}
+                    src={PERSONA_BUSTE_SRC[active.key]}
                     alt=""
                     width={52}
                     height={39}

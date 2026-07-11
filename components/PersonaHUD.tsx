@@ -61,6 +61,14 @@ const VOL_SRC: Record<PersonaKey, string> = {
   mickael: "/images/personae/assets/silhouette-mickael-vol.svg",
 };
 
+// Portrait statique (assets fournis, ratio natif 4:3) — réutilisé à côté
+// du nom dans la modale personae et dans l'en-tête du chat.
+export const PERSONA_BUSTE_SRC: Record<PersonaKey, string> = {
+  gabrielle: "/images/personae/assets/silhouette-gabrielle-buste.svg",
+  raphael: "/images/personae/assets/silhouette-raphael-buste.svg",
+  mickael: "/images/personae/assets/silhouette-mickael-buste.svg",
+};
+
 export default function PersonaHUD({
   persona,
   etat = "idle",
