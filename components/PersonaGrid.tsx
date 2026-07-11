@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import PersonaHUD, {
-  PERSONA_SIGIL_SRC,
-  PERSONA_SILHOUETTE_SRC,
-  type PersonaEtat,
-  type PersonaKey,
-} from "@/components/PersonaHUD";
+import PersonaHUD, { PERSONA_SILHOUETTE_SRC, type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
 
 // Cycle de démonstration des 4 états dans la modale, pour qu'on les voie
 // tous sans avoir besoin d'une vraie conversation avec Gabrielle.
@@ -88,8 +83,14 @@ export default function PersonaGrid() {
             onClick={() => openPersona(p.key)}
             className="group text-center"
           >
-            <div className="mx-auto transition group-hover:scale-105">
-              <Image src={PERSONA_SIGIL_SRC[p.key]} alt="" width={64} height={64} />
+            <div className="mx-auto w-full max-w-[128px] transition group-hover:scale-105">
+              <Image
+                src={PERSONA_SILHOUETTE_SRC[p.key]}
+                alt=""
+                width={800}
+                height={600}
+                className="w-full h-auto rounded-md"
+              />
             </div>
             <p className="mt-2 text-sm font-medium group-hover:text-brand">{p.name}</p>
             <p className="mt-2 rounded-2xl rounded-b-none border border-border bg-surface px-3 py-2 text-xs text-foreground/70">
