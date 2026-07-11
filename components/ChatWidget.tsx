@@ -204,7 +204,7 @@ export default function ChatWidget() {
         }
         aria-label={open ? "Fermer le chat" : `Ouvrir le chat avec ${PERSONA_NAMES[activePersona]}`}
       >
-        {open ? "✕" : <PersonaHUD persona={activePersona} etat={etat} size={42} followMouse={false} />}
+        {open ? "✕" : <PersonaHUD persona={activePersona} etat={etat} size={42} />}
       </button>
     </div>
   );
