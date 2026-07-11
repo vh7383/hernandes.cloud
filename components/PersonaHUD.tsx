@@ -46,13 +46,19 @@ interface PersonaHUDProps {
   followMouse?: boolean;
   showLabel?: boolean;
   size?: number;
-  // Joue une animation d'arrivée ponctuelle au montage (burst + sigil +
-  // pupille) — spec chorégraphiée par Fable, cf. docs/decisions.md. Ne
-  // rejoue pas tant que le composant ne remonte pas : le parent doit lui
-  // donner une `key` stable par identité (ex. key={persona}) pour la
-  // redéclencher au changement de persona.
+  // Joue une animation d'arrivée ponctuelle au montage (vol depuis un bord
+  // d'écran → burst → sigil → pupille) — spec chorégraphiée par Fable,
+  // cf. docs/decisions.md. Ne rejoue pas tant que le composant ne remonte
+  // pas : le parent doit lui donner une `key` stable par identité (ex.
+  // key={persona}) pour la redéclencher au changement de persona.
   arrive?: boolean;
 }
+
+const VOL_SRC: Record<PersonaKey, string> = {
+  gabrielle: "/images/personae/assets/silhouette-gabrielle-vol.svg",
+  raphael: "/images/personae/assets/silhouette-raphael-vol.svg",
+  mickael: "/images/personae/assets/silhouette-mickael-vol.svg",
+};
 
 export default function PersonaHUD({
   persona,
@@ -63,6 +69,7 @@ export default function PersonaHUD({
   arrive = false,
 }: PersonaHUDProps) {
   const eyeRef = useRef<HTMLDivElement>(null);
+  const flightRef = useRef<HTMLImageElement>(null);
   const burstRef = useRef<HTMLDivElement>(null);
   const sigilRef = useRef<HTMLDivElement>(null);
   const pupilRef = useRef<HTMLDivElement>(null);
@@ -70,12 +77,54 @@ export default function PersonaHUD({
 
   useEffect(() => {
     if (!arrive) return;
+
+    // Phase 0 — vol : départ d'un bord d'écran aléatoire, trajectoire
+    // courbe (wobble perpendiculaire), flip selon la direction, fusion
+    // dans le sigil. Le burst/sigil/pupille sont décalés d'autant pour
+    // démarrer pile à la fusion.
+    let delay = 0;
+    const flightEl = flightRef.current;
+    if (flightEl) {
+      const r = flightEl.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const M = 180;
+      const edge = Math.floor(Math.random() * 4);
+      let px: number, py: number;
+      if (edge === 0) { px = Math.random() * W; py = -M; }
+      else if (edge === 1) { px = Math.random() * W; py = H + M; }
+      else if (edge === 2) { px = -M; py = Math.random() * H; }
+      else { px = W + M; py = Math.random() * H; }
+      const sx = px - cx;
+      const sy = py - cy;
+      const ang = Math.atan2(sy, sx);
+      const wob = (Math.random() - 0.5) * 420;
+      const mx = sx * 0.45 - Math.sin(ang) * wob;
+      const my = sy * 0.45 + Math.cos(ang) * wob;
+      const flip = sx > 0 ? -1 : 1;
+      const tilt = (Math.random() - 0.5) * 30;
+      const dur = 1250;
+      flightEl.animate(
+        [
+          { transform: `translate(${sx}px,${sy}px) rotate(${tilt}deg) scale(${flip * 1.15}, 1.15)`, opacity: 0 },
+          { opacity: 1, offset: 0.18 },
+          { transform: `translate(${mx}px,${my}px) rotate(${tilt * 0.4}deg) scale(${flip * 0.85}, 0.85)`, opacity: 1, offset: 0.55 },
+          { transform: `translate(0px, 0px) rotate(0deg) scale(${flip * 0.12}, .12)`, opacity: 0.9, offset: 0.96 },
+          { transform: `translate(0px, 0px) scale(${flip * 0.08}, .08)`, opacity: 0 },
+        ],
+        { duration: dur, easing: "cubic-bezier(.3,.1,.25,1)" },
+      );
+      delay = dur - 120;
+    }
+
     burstRef.current?.animate(
       [
         { transform: "scale(.3)", opacity: 0.9 },
         { transform: "scale(2.2)", opacity: 0 },
       ],
-      { duration: 600, easing: "cubic-bezier(.2,.7,.3,1)" },
+      { duration: 600, easing: "cubic-bezier(.2,.7,.3,1)", delay },
     );
     sigilRef.current?.animate(
       [
@@ -83,7 +132,7 @@ export default function PersonaHUD({
         { transform: "scale(1.06) rotate(3deg)", opacity: 1, offset: 0.7 },
         { transform: "scale(1) rotate(0deg)", opacity: 1 },
       ],
-      { duration: 700, easing: "cubic-bezier(.22,1,.36,1)" },
+      { duration: 700, easing: "cubic-bezier(.22,1,.36,1)", delay, fill: "backwards" },
     );
     pupilRef.current?.animate(
       [
@@ -92,7 +141,7 @@ export default function PersonaHUD({
         { transform: "scale(1.3)", opacity: 1, offset: 0.8 },
         { transform: "scale(1)", opacity: 1 },
       ],
-      { duration: 800, easing: "ease-out" },
+      { duration: 800, easing: "ease-out", delay, fill: "backwards" },
     );
     // Ne joue qu'au montage — cf. commentaire du prop `arrive` ci-dessus.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -153,6 +202,23 @@ export default function PersonaHUD({
               border: `2px solid ${c.main}`,
               opacity: 0,
               pointerEvents: "none",
+            }}
+          />
+        )}
+        {arrive && (
+          // eslint-disable-next-line @next/next/no-img-element -- overlay anime via WAAPI (translate/rotate/scale), pas un <Image> layout classique.
+          <img
+            ref={flightRef}
+            src={VOL_SRC[persona]}
+            alt=""
+            style={{
+              position: "absolute",
+              width: size * 1.1,
+              height: size * 0.825,
+              opacity: 0,
+              pointerEvents: "none",
+              zIndex: 3,
+              willChange: "transform",
             }}
           />
         )}
