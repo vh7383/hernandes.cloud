@@ -104,12 +104,7 @@ export default function ChatWidget() {
       {open && (
         <div className="mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <span className="flex items-center gap-2">
-              <PersonaHUD persona={activePersona} etat={etat} size={32} showLabel />
-              <span className="font-mono text-sm font-semibold text-brand">
-                {PERSONA_NAMES[activePersona]}
-              </span>
-            </span>
+            <PersonaHUD persona={activePersona} etat={etat} size={32} showLabel />
             <button
               type="button"
               onClick={() => setOpen(false)}
