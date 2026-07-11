@@ -104,7 +104,9 @@ export default function ChatWidget() {
       {open && (
         <div className="mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <PersonaHUD persona={activePersona} etat={etat} size={32} showLabel />
+            {/* key={activePersona} : rejoue l'arrivée (vol + burst + sigil +
+                pupille) à chaque changement de persona, cf. PersonaHUD/decisions.md. */}
+            <PersonaHUD key={activePersona} persona={activePersona} etat={etat} size={32} showLabel arrive />
             <button
               type="button"
               onClick={() => setOpen(false)}

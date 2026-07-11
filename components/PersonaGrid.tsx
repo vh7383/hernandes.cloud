@@ -63,6 +63,15 @@ export default function PersonaGrid() {
     setOpenKey(key);
   }
 
+  // Navigation circulaire dans la modale (flèches) — remonte le HUD
+  // (key={active.key}) donc rejoue l'arrivée à chaque changement.
+  function stepPersona(delta: number) {
+    const currentIndex = PERSONAE.findIndex((p) => p.key === openKey);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + delta + PERSONAE.length) % PERSONAE.length;
+    openPersona(PERSONAE[nextIndex].key);
+  }
+
   return (
     <>
       <div className="mt-4 grid grid-cols-3 gap-4">
@@ -89,6 +98,28 @@ export default function PersonaGrid() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6"
           onClick={() => setOpenKey(null)}
         >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              stepPersona(-1);
+            }}
+            aria-label="Persona précédente"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-3xl text-foreground/40 hover:text-foreground"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              stepPersona(1);
+            }}
+            aria-label="Persona suivante"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-3xl text-foreground/40 hover:text-foreground"
+          >
+            ›
+          </button>
           <div
             key={active.key}
             className="max-w-md overflow-hidden rounded-lg border border-border bg-surface"
