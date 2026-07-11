@@ -11,7 +11,7 @@ interface ChatMessage {
 type Phase = "idle" | "sending" | "error";
 
 const GREETING =
-  "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir — un petit modèle local, pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
+  "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir — pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
 
 // Durée d'affichage de l'état "parle" après une réponse reçue, avant de
 // revenir à "idle" — purement cosmétique (cf. components/PersonaHUD.tsx).

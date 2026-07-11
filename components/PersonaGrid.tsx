@@ -25,7 +25,7 @@ const PERSONAE: Persona[] = [
     tagline: "Annonce · Accueil",
     bubble: "« Entrez, je vous accueille. »",
     description:
-      "Le visage que vous croisez en premier sur ce site. Son rôle : accueillir, orienter, donner un premier niveau de réponse — sans jamais prétendre en savoir plus qu'elle n'en sait. Un modèle local, volontairement modeste, pensé pour la franchise plutôt que pour l'illusion de compétence.",
+      "Le visage que vous croisez en premier sur ce site. Son rôle : accueillir, orienter, donner un premier niveau de réponse — sans jamais prétendre en savoir plus qu'elle n'en sait. Volontairement modeste, pensée pour la franchise plutôt que pour l'illusion de compétence.",
   },
   {
     key: "raphael",
