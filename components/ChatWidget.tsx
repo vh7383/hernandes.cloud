@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import PersonaHUD, { type PersonaEtat } from "@/components/PersonaHUD";
+import PersonaHUD, { type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -17,9 +17,27 @@ const GREETING =
 // revenir à "idle" — purement cosmétique (cf. components/PersonaHUD.tsx).
 const PARLE_DURATION_MS = 1500;
 
+const PERSONA_NAMES: Record<PersonaKey, string> = {
+  gabrielle: "Gabrielle",
+  raphael: "Raphaël",
+  mickael: "Mickaël",
+};
+
+// Seule Gabrielle a un vrai backend. Choisir Raphaël ou Mickaël ici est
+// volontairement "pas effectif" — cf. docs/decisions.md : chacun décline
+// dans son propre style, sans jamais appeler l'API ni prétendre discuter
+// pour de vrai.
+const PERSONA_REDIRECTS: Partial<Record<PersonaKey, string>> = {
+  raphael:
+    "Je ne trouve aucune trace de vous dans ce que je garde — sans mémoire commune, je n'ai pas grand-chose à vous dire. Gabrielle, elle, est là pour ça.",
+  mickael:
+    "Je ne vous identifie pas, et je ne discute pas avec un inconnu. Ce n'est pas mon rôle ici — allez voir Gabrielle, c'est la sienne.",
+};
+
 export default function ChatWidget() {
   // Se déploie directement à l'arrivée sur le site — cf. docs/decisions.md.
   const [open, setOpen] = useState(true);
+  const [activePersona, setActivePersona] = useState<PersonaKey>("gabrielle");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
@@ -27,8 +45,18 @@ export default function ChatWidget() {
   const [errorMessage, setErrorMessage] = useState("");
   const parleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // L'état animé (pense/parle/alerte) ne reflète une vraie activité que pour
+  // Gabrielle — Raphaël et Mickaël n'ont rien à traiter, donc restent idle.
   const etat: PersonaEtat =
-    phase === "sending" ? "pense" : phase === "error" ? "alerte" : justReplied ? "parle" : "idle";
+    activePersona !== "gabrielle"
+      ? "idle"
+      : phase === "sending"
+        ? "pense"
+        : phase === "error"
+          ? "alerte"
+          : justReplied
+            ? "parle"
+            : "idle";
 
   async function handleSend() {
     const text = input.trim();
@@ -77,8 +105,10 @@ export default function ChatWidget() {
         <div className="mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <span className="flex items-center gap-2">
-              <PersonaHUD persona="gabrielle" etat={etat} size={32} showLabel />
-              <span className="font-mono text-sm font-semibold text-brand">Gabrielle</span>
+              <PersonaHUD persona={activePersona} etat={etat} size={32} showLabel />
+              <span className="font-mono text-sm font-semibold text-brand">
+                {PERSONA_NAMES[activePersona]}
+              </span>
             </span>
             <button
               type="button"
@@ -90,26 +120,52 @@ export default function ChatWidget() {
             </button>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
-            {messages.length === 0 && (
-              <p className="text-sm text-foreground/60">{GREETING}</p>
-            )}
-            {messages.map((message, index) => (
-              <div
-                key={index}
+          {/* Choix de persona volontairement décoratif : seule Gabrielle
+              répond vraiment, cf. PERSONA_REDIRECTS ci-dessus. */}
+          <div className="flex items-center gap-1 border-b border-border px-3 py-1.5">
+            {(Object.keys(PERSONA_NAMES) as PersonaKey[]).map((key) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setActivePersona(key)}
+                aria-pressed={activePersona === key}
                 className={
-                  message.role === "user"
-                    ? "ml-auto max-w-[85%] rounded-lg bg-brand px-3 py-2 text-sm text-white"
-                    : "mr-auto max-w-[85%] rounded-lg border border-border px-3 py-2 text-sm"
+                  activePersona === key
+                    ? "rounded-full bg-brand/10 px-2 py-1 text-xs text-brand"
+                    : "rounded-full px-2 py-1 text-xs text-foreground/50 hover:text-foreground"
                 }
               >
-                {message.content}
-              </div>
+                {PERSONA_NAMES[key]}
+              </button>
             ))}
-            {phase === "error" && (
-              <p className="rounded-lg border border-dashed border-border px-3 py-2 text-sm text-foreground/70">
-                {errorMessage}
-              </p>
+          </div>
+
+          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
+            {activePersona !== "gabrielle" ? (
+              <p className="text-sm text-foreground/60">{PERSONA_REDIRECTS[activePersona]}</p>
+            ) : (
+              <>
+                {messages.length === 0 && (
+                  <p className="text-sm text-foreground/60">{GREETING}</p>
+                )}
+                {messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={
+                      message.role === "user"
+                        ? "ml-auto max-w-[85%] rounded-lg bg-brand px-3 py-2 text-sm text-white"
+                        : "mr-auto max-w-[85%] rounded-lg border border-border px-3 py-2 text-sm"
+                    }
+                  >
+                    {message.content}
+                  </div>
+                ))}
+                {phase === "error" && (
+                  <p className="rounded-lg border border-dashed border-border px-3 py-2 text-sm text-foreground/70">
+                    {errorMessage}
+                  </p>
+                )}
+              </>
             )}
           </div>
 
@@ -124,13 +180,17 @@ export default function ChatWidget() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Écris un message..."
-              disabled={phase === "sending"}
-              className="flex-1 rounded-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand"
+              placeholder={
+                activePersona === "gabrielle"
+                  ? "Écris un message..."
+                  : "Repasse sur Gabrielle pour échanger"
+              }
+              disabled={phase === "sending" || activePersona !== "gabrielle"}
+              className="flex-1 rounded-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand disabled:opacity-50"
             />
             <button
               type="submit"
-              disabled={phase === "sending" || !input.trim()}
+              disabled={phase === "sending" || !input.trim() || activePersona !== "gabrielle"}
               className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
             >
               Envoyer
@@ -143,9 +203,9 @@ export default function ChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
-        aria-label={open ? "Fermer Gabrielle" : "Ouvrir Gabrielle"}
+        aria-label={open ? "Fermer le chat" : `Ouvrir le chat avec ${PERSONA_NAMES[activePersona]}`}
       >
-        {open ? "✕" : <PersonaHUD persona="gabrielle" etat={etat} size={42} followMouse={false} />}
+        {open ? "✕" : <PersonaHUD persona={activePersona} etat={etat} size={42} followMouse={false} />}
       </button>
     </div>
   );
