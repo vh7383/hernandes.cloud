@@ -46,6 +46,12 @@ interface PersonaHUDProps {
   followMouse?: boolean;
   showLabel?: boolean;
   size?: number;
+  // Joue une animation d'arrivée ponctuelle au montage (burst + sigil +
+  // pupille) — spec chorégraphiée par Fable, cf. docs/decisions.md. Ne
+  // rejoue pas tant que le composant ne remonte pas : le parent doit lui
+  // donner une `key` stable par identité (ex. key={persona}) pour la
+  // redéclencher au changement de persona.
+  arrive?: boolean;
 }
 
 export default function PersonaHUD({
@@ -54,9 +60,43 @@ export default function PersonaHUD({
   followMouse = true,
   showLabel = false,
   size = 64,
+  arrive = false,
 }: PersonaHUDProps) {
   const eyeRef = useRef<HTMLDivElement>(null);
+  const burstRef = useRef<HTMLDivElement>(null);
+  const sigilRef = useRef<HTMLDivElement>(null);
+  const pupilRef = useRef<HTMLDivElement>(null);
   const [pupil, setPupil] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (!arrive) return;
+    burstRef.current?.animate(
+      [
+        { transform: "scale(.3)", opacity: 0.9 },
+        { transform: "scale(2.2)", opacity: 0 },
+      ],
+      { duration: 600, easing: "cubic-bezier(.2,.7,.3,1)" },
+    );
+    sigilRef.current?.animate(
+      [
+        { transform: "scale(.55) rotate(-18deg)", opacity: 0 },
+        { transform: "scale(1.06) rotate(3deg)", opacity: 1, offset: 0.7 },
+        { transform: "scale(1) rotate(0deg)", opacity: 1 },
+      ],
+      { duration: 700, easing: "cubic-bezier(.22,1,.36,1)" },
+    );
+    pupilRef.current?.animate(
+      [
+        { transform: "scale(0)", opacity: 0 },
+        { transform: "scale(0)", opacity: 0, offset: 0.5 },
+        { transform: "scale(1.3)", opacity: 1, offset: 0.8 },
+        { transform: "scale(1)", opacity: 1 },
+      ],
+      { duration: 800, easing: "ease-out" },
+    );
+    // Ne joue qu'au montage — cf. commentaire du prop `arrive` ci-dessus.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!followMouse) return;
@@ -88,6 +128,7 @@ export default function PersonaHUD({
   const eyeSize = size * (34 / 112);
   const pupilSize = size * (10 / 112);
   const ringInset = size * (8 / 112);
+  const burstInset = -size * (16 / 112);
 
   return (
     <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center" }}>
@@ -102,6 +143,23 @@ export default function PersonaHUD({
           justifyContent: "center",
         }}
       >
+        {arrive && (
+          <div
+            ref={burstRef}
+            style={{
+              position: "absolute",
+              inset: burstInset,
+              borderRadius: "50%",
+              border: `2px solid ${c.main}`,
+              opacity: 0,
+              pointerEvents: "none",
+            }}
+          />
+        )}
+        <div
+          ref={sigilRef}
+          style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
         <div
           style={{
             position: "absolute",
@@ -134,6 +192,7 @@ export default function PersonaHUD({
           }}
         >
           <div
+            ref={pupilRef}
             style={{
               width: pupilSize,
               height: pupilSize,
@@ -143,6 +202,7 @@ export default function PersonaHUD({
               transition: "transform .12s ease-out, background .3s",
             }}
           />
+        </div>
         </div>
       </div>
       {showLabel && (

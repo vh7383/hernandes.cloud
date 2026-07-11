@@ -57,3 +57,10 @@ body {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
+
+/* Révélation du texte de détail dans la modale personae, décalée après
+   l'arrivée du HUD — spec chorégraphiée par Fable, cf. docs/decisions.md. */
+@keyframes persona-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

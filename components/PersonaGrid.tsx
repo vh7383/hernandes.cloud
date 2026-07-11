@@ -90,11 +90,12 @@ export default function PersonaGrid() {
           onClick={() => setOpenKey(null)}
         >
           <div
+            key={active.key}
             className="max-w-md overflow-hidden rounded-lg border border-border bg-surface"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-col items-center gap-2 bg-[#12100E] py-8">
-              <PersonaHUD persona={active.key} etat={ETAT_CYCLE[etatIndex]} size={160} />
+              <PersonaHUD persona={active.key} etat={ETAT_CYCLE[etatIndex]} size={160} arrive />
               <p className="text-[11px] uppercase tracking-[0.2em] text-foreground/40">
                 {ETAT_CYCLE[etatIndex]}
               </p>
@@ -116,7 +117,13 @@ export default function PersonaGrid() {
                   ✕
                 </button>
               </div>
-              <p className="mt-3 text-sm text-foreground/70">{active.description}</p>
+              {/* Décalée après l'arrivée du HUD (150ms) — spec Fable, cf. docs/decisions.md. */}
+              <p
+                className="mt-3 text-sm text-foreground/70"
+                style={{ animation: "persona-reveal 350ms ease-out 150ms both" }}
+              >
+                {active.description}
+              </p>
             </div>
           </div>
         </div>
