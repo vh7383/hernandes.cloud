@@ -139,20 +139,11 @@ export default function PersonaGrid() {
             </div>
             <div className="p-5">
               <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={PERSONA_SILHOUETTE_SRC[active.key]}
-                    alt=""
-                    width={52}
-                    height={39}
-                    className="rounded-md"
-                  />
-                  <div>
-                    <h3 className="text-lg font-semibold">{active.name}</h3>
-                    <p className="text-xs uppercase tracking-wide text-foreground/50">
-                      {active.tagline}
-                    </p>
-                  </div>
+                <div>
+                  <h3 className="text-lg font-semibold">{active.name}</h3>
+                  <p className="text-xs uppercase tracking-wide text-foreground/50">
+                    {active.tagline}
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -171,6 +162,15 @@ export default function PersonaGrid() {
                 {active.description}
               </p>
             </div>
+            {/* Silhouette en pied en pleine largeur — trop petite en avatar,
+                cf. docs/decisions.md. */}
+            <Image
+              src={PERSONA_SILHOUETTE_SRC[active.key]}
+              alt=""
+              width={800}
+              height={600}
+              className="w-full h-auto"
+            />
           </div>
         </div>
       )}

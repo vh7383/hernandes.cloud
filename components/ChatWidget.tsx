@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import PersonaHUD, { PERSONA_SIGIL_SRC, type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
+import PersonaHUD, { PERSONA_BUSTE_SRC, type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -108,7 +108,7 @@ export default function ChatWidget() {
             {/* key={activePersona} : rejoue l'arrivée (vol + burst + sigil +
                 pupille) à chaque changement de persona, cf. PersonaHUD/decisions.md. */}
             <PersonaHUD key={activePersona} persona={activePersona} etat={etat} size={32} showLabel arrive />
-            <Image src={PERSONA_SIGIL_SRC[activePersona]} alt="" width={32} height={32} />
+            <Image src={PERSONA_BUSTE_SRC[activePersona]} alt="" width={36} height={27} className="rounded-md" />
             <button
               type="button"
               onClick={() => setOpen(false)}
