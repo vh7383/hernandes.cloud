@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { GabrielleIcon, RaphaelIcon, MickaelIcon } from "@/components/EntityIcons";
+import PersonaGrid from "@/components/PersonaGrid";
 
 export const metadata: Metadata = {
   title: "LabIA — hernandes.cloud",
@@ -76,38 +76,10 @@ export default function LabiaPage() {
         </p>
         <p className="mt-3 text-foreground/70">
           Gabrielle n&apos;est pas seule dans la maison. AlicIA se factorise en
-          plusieurs rôles — je n&apos;en dis pas plus ici, mais voici deux autres
-          visages que vous pourriez croiser.
+          plusieurs rôles — cliquez sur un visage pour en savoir plus sur
+          chacun.
         </p>
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          <div className="text-center">
-            <div className="mx-auto h-16 w-16">
-              <GabrielleIcon />
-            </div>
-            <p className="mt-2 text-sm font-medium">Gabrielle</p>
-            <p className="mt-2 rounded-2xl rounded-b-none border border-border bg-surface px-3 py-2 text-xs text-foreground/70">
-              &laquo;&nbsp;Entrez, je vous accueille.&nbsp;&raquo;
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="mx-auto h-16 w-16">
-              <RaphaelIcon />
-            </div>
-            <p className="mt-2 text-sm font-medium">Raphaël</p>
-            <p className="mt-2 rounded-2xl rounded-b-none border border-border bg-surface px-3 py-2 text-xs text-foreground/70">
-              &laquo;&nbsp;Je me souviens de tout. Enfin, presque.&nbsp;&raquo;
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="mx-auto h-16 w-16">
-              <MickaelIcon />
-            </div>
-            <p className="mt-2 text-sm font-medium">Mickaël</p>
-            <p className="mt-2 rounded-2xl rounded-b-none border border-border bg-surface px-3 py-2 text-xs text-foreground/70">
-              &laquo;&nbsp;Je veille. C&apos;est tout ce que vous devez savoir.&nbsp;&raquo;
-            </p>
-          </div>
-        </div>
+        <PersonaGrid />
       </section>
 
       <section className="mt-10">

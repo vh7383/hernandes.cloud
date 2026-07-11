@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+
+  <defs>
+    <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(115)">
+      <rect width="14" height="14" fill="#0C0A09"></rect>
+      <line x1="0" y1="0" x2="0" y2="14" stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="1.5"></line>
+    </pattern>
+    <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.1" fill="#FFFFFF" fill-opacity="0.14"></circle>
+    </pattern>
+  </defs>
+<rect width="800" height="600" fill="url(#hatch)"></rect>
+<rect x="560" y="0" width="240" height="200" fill="url(#dots)" opacity="0.5"></rect>
+<rect x="0" y="440" width="220" height="160" fill="url(#dots)" opacity="0.35"></rect>
+
+  <g transform="translate(-70,240) scale(1.35)">
+  <path d="M415,285&#xA;           C470,180 555,115 690,92&#xA;           C655,128 640,150 608,162&#xA;           C655,162 682,176 700,194&#xA;           C652,208 622,210 592,214&#xA;           C630,234 652,256 662,282&#xA;           C614,276 584,266 558,254&#xA;           C580,294 590,326 588,362&#xA;           C548,336 522,310 502,284&#xA;           C512,334 510,376 498,418&#xA;           C468,378 448,336 438,304 Z" fill="#E9E6DF" stroke="#0C0A09" stroke-width="2"></path></g>
+  <g transform="translate(870,240) scale(-1.35,1.35)">
+  <path d="M415,285&#xA;           C470,180 555,115 690,92&#xA;           C655,128 640,150 608,162&#xA;           C655,162 682,176 700,194&#xA;           C652,208 622,210 592,214&#xA;           C630,234 652,256 662,282&#xA;           C614,276 584,266 558,254&#xA;           C580,294 590,326 588,362&#xA;           C548,336 522,310 502,284&#xA;           C512,334 510,376 498,418&#xA;           C468,378 448,336 438,304 Z" fill="#E9E6DF" stroke="#0C0A09" stroke-width="2"></path></g>
+  <path d="M400,90 C306,110 274,186 284,290 C272,410 282,530 302,600 L334,600 C322,500 324,400 330,320&#xA;      C344,430 364,520 392,600 L408,600 C436,520 456,430 470,320 C476,400 478,500 466,600 L498,600&#xA;      C518,530 528,410 516,290 C526,186 494,110 400,90 Z" fill="#DCD8CF" stroke="#0C0A09" stroke-width="2.5"></path>
+  <circle cx="400" cy="222" r="72" fill="#15130F" stroke="#DCD8CF" stroke-width="3"></circle>
+  <circle cx="372" cy="214" r="11" fill="#2E8B74"></circle><circle cx="428" cy="214" r="11" fill="#2E8B74"></circle>
+   <g stroke="#C9CCD1" stroke-width="6" fill="#1D1A16">
+     <path d="M290,392 C314,336 352,306 400,302 C448,306 486,336 510,392 C474,362 438,350 400,350 C362,350 326,362 290,392 Z"></path>
+     <path d="M266,440 C296,368 344,332 400,328 C456,332 504,368 534,440 C492,400 448,384 400,384 C352,384 308,400 266,440 Z" opacity="0.8"></path>
+   </g>
+   <path d="M400,410 C452,418 480,446 488,486 C494,524 492,570 490,600 L310,600 C308,570 306,524 312,486 C320,446 348,418 400,410 Z" fill="#15130F" stroke="#2A2620" stroke-width="2"></path>
+   <circle cx="400" cy="452" r="24" fill="#0C0A09" stroke="#2E8B74" stroke-width="6"></circle>
+   <circle cx="400" cy="452" r="10" fill="#2E8B74"></circle>
+
+</svg>

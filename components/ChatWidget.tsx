@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { GabrielleIcon } from "@/components/EntityIcons";
+import { useRef, useState } from "react";
+import PersonaHUD, { type PersonaEtat } from "@/components/PersonaHUD";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -13,13 +13,22 @@ type Phase = "idle" | "sending" | "error";
 const GREETING =
   "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir — un petit modèle local, pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
 
+// Durée d'affichage de l'état "parle" après une réponse reçue, avant de
+// revenir à "idle" — purement cosmétique (cf. components/PersonaHUD.tsx).
+const PARLE_DURATION_MS = 1500;
+
 export default function ChatWidget() {
   // Se déploie directement à l'arrivée sur le site — cf. docs/decisions.md.
   const [open, setOpen] = useState(true);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
+  const [justReplied, setJustReplied] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const parleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const etat: PersonaEtat =
+    phase === "sending" ? "pense" : phase === "error" ? "alerte" : justReplied ? "parle" : "idle";
 
   async function handleSend() {
     const text = input.trim();
@@ -53,6 +62,9 @@ export default function ChatWidget() {
       const data = await response.json();
       setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
       setPhase("idle");
+      setJustReplied(true);
+      if (parleTimeout.current) clearTimeout(parleTimeout.current);
+      parleTimeout.current = setTimeout(() => setJustReplied(false), PARLE_DURATION_MS);
     } catch {
       setPhase("error");
       setErrorMessage("Impossible de contacter le serveur.");
@@ -65,9 +77,7 @@ export default function ChatWidget() {
         <div className="mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <span className="flex items-center gap-2">
-              <span className="h-6 w-6 shrink-0">
-                <GabrielleIcon />
-              </span>
+              <PersonaHUD persona="gabrielle" etat={etat} size={24} />
               <span className="font-mono text-sm font-semibold text-brand">Gabrielle</span>
             </span>
             <button
@@ -135,7 +145,7 @@ export default function ChatWidget() {
         className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
         aria-label={open ? "Fermer Gabrielle" : "Ouvrir Gabrielle"}
       >
-        {open ? "✕" : <span className="h-9 w-9"><GabrielleIcon /></span>}
+        {open ? "✕" : <PersonaHUD persona="gabrielle" etat={etat} size={36} followMouse={false} />}
       </button>
     </div>
   );

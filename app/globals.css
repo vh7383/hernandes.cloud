@@ -34,3 +34,26 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Animations du HUD des personae (components/PersonaHUD.tsx) — portées du
+   fichier "HUD Agent.dc.html" fourni par Vincent, cf. docs/decisions.md. */
+@keyframes persona-breath {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+@keyframes persona-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes persona-spin-rev {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+@keyframes persona-pulse-fast {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+@keyframes persona-flash {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
