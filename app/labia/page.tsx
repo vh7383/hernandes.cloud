@@ -32,6 +32,17 @@ export default function LabiaPage() {
       <p className="mt-2 text-xs text-foreground/50">
         Exemple réel : une question sur la météo des prochains jours.
       </p>
+      <Image
+        src="/images/projects/alicia-trello-exec-example.png"
+        alt="AlicIA exécutant un outil pour lister les cartes d'un tableau Trello, identifiants masqués"
+        width={905}
+        height={910}
+        className="mt-6 rounded border border-border"
+      />
+      <p className="mt-2 text-xs text-foreground/50">
+        Autre exemple : elle appelle un outil, en observe le résultat, puis
+        l&apos;exploite dans sa réponse — identifiants internes masqués.
+      </p>
 
       <section className="mt-10">
         <h2 className="flex items-center gap-3 text-xl font-semibold">
