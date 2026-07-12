@@ -15,10 +15,36 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://hernandes.cloud";
+const SITE_DESCRIPTION =
+  "Portfolio de Vincent Hernandes, ingénieur infrastructure & DevOps : projets, compétences techniques et système auto-hébergé (Docker, monitoring, IA locale). Découvrez mes réalisations et contactez-moi pour toute collaboration.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Vincent Hernandes — hernandes.cloud",
-  description:
-    "Portfolio, services auto-hébergés et monitoring de Vincent Hernandes.",
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: "Vincent Hernandes — hernandes.cloud",
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "hernandes.cloud",
+    locale: "fr_FR",
+    type: "website",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 627,
+        alt: "Vincent Hernandes — Ingénieur Infrastructure & DevOps",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vincent Hernandes — hernandes.cloud",
+    description: SITE_DESCRIPTION,
+    images: ["/images/og-image.png"],
+  },
 };
 
 export default function RootLayout({
