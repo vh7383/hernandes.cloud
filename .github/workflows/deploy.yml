@@ -70,6 +70,12 @@ jobs:
         working-directory: kb
         run: npm ci
 
+      # .quartz/ (résolution des plugins) est régénéré à chaque run plutôt
+      # que committé — pesait ~900 Mo avec l'historique git de chaque plugin.
+      - name: Installer les plugins Quartz (depuis quartz.lock.json)
+        working-directory: kb
+        run: node quartz/bootstrap-cli.mjs plugin install
+
       - name: Builder kb (Quartz)
         working-directory: kb
         run: npx quartz build

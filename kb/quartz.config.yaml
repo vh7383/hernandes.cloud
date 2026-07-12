@@ -260,16 +260,10 @@ plugins:
       position: beforeBody
       priority: 15
       display: all
-  # Desactive : ecrasait la palette (theme.colors ci-dessus) avec son propre
-  # theme au lieu de la respecter -- on garde la palette native alignee sur
-  # hernandes.cloud.
-  - source:
-      name: quartz-themes
-      repo: github:saberzero1/quartz-themes
-      subdir: plugin
-    enabled: false
-    options:
-      theme: default
+  # quartz-themes retire entierement (pas juste desactive) : ecrasait la
+  # palette (theme.colors ci-dessus) avec son propre theme, et pesait 805 Mo
+  # une fois installe (git history de tous ses presets) -- inutile puisqu'on
+  # garde la palette native alignee sur hernandes.cloud.
   - source: github:quartz-community/obsidian-plugin-excalidraw
     enabled: true
     options:
