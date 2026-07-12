@@ -189,8 +189,20 @@ export default function LabiaPage() {
           un vrai graphe d&apos;échanges entre les différents agents du labo
           (question → boucle production/évaluation → validation).
         </p>
+        <Image
+          src="/images/projects/alicia-langgraph-diagram.png"
+          alt="Diagramme du graphe LangGraph : classifier, writer, critic, display"
+          width={178}
+          height={606}
+          className="mt-4 rounded border border-border"
+        />
+        <p className="mt-2 text-xs text-foreground/50">
+          Le graphe lui-même : un routeur (classifier) qui distingue les
+          demandes simples (droit vers l&apos;affichage) des plus techniques
+          (passage par writer/critic, avec boucle de relecture).
+        </p>
         <p className="mt-3 text-foreground/70">
-          Une vraie trace LangSmith, ci-dessous : un graphe LangGraph
+          Une vraie trace LangSmith, ci-dessous : ce même graphe LangGraph
           (classifier → writer → critic → router) qui mélange un modèle local
           (<code className="rounded bg-surface px-1 py-0.5 text-sm">qwen3.5:4b</code>{" "}
           via Ollama) et un modèle externe pour la relecture critique — la
