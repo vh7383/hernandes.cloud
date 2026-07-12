@@ -57,7 +57,12 @@ jobs:
   # docs/decisions.md). Pas de Docker/arm64 ici — c'est du HTML/CSS/JS pur,
   # buildable sur n'importe quelle archi et servi directement par nginx sur
   # le Pi (bloc nginx à poser manuellement, cf. recette).
+  # needs: deploy -- sans ça, ce job tournait en parallèle du déploiement
+  # Docker et se connectait en SSH au Pi pendant la recréation du conteneur
+  # (docker compose up -d) ; sur un Pi à ressources limitées, ça faisait
+  # échouer rsync ("connection unexpectedly closed") à chaque fois.
   build-and-deploy-kb:
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
