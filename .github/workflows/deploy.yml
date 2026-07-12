@@ -96,4 +96,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.PI_HOST }} >> ~/.ssh/known_hosts
-          rsync -avzi --stats --delete -e "ssh -o StrictHostKeyChecking=no" kb/public/ ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }}:/opt/kb-hernandes-cloud/public/
+          # Destination vide : rrsync côté Pi préfixe déjà avec le dossier
+          # restreint (/opt/kb-hernandes-cloud/public) -- le repréciser ici
+          # le doublait ("…/public/opt/kb-hernandes-cloud/public").
+          rsync -avzi --stats --delete -e "ssh -o StrictHostKeyChecking=no" kb/public/ ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }}:
