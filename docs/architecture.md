@@ -58,10 +58,15 @@ Puis coller `~/.ssh/id_ed25519_github_kb` (clé privée) dans le secret GitHub `
 
 **Configuration nginx sur le Pi (à poser une fois, manuellement)** :
 
+`hernandes.cloud` a un certificat **wildcard** (`*.hernandes.cloud`, émis via acme.sh/ZeroSSL — pas certbot, retiré depuis) qui couvre déjà tous les sous-domaines de premier niveau. Pas besoin d'émettre un certificat dédié pour `kb` : on réutilise les mêmes fichiers, et le redirect HTTP→HTTPS pour `*.hernandes.cloud` est déjà géré globalement par le bloc port 80 existant de `hernandes.cloud`.
+
 ```nginx
 server {
-    listen 443 ssl http2;
+    listen 443 ssl;
     server_name kb.hernandes.cloud;
+
+    ssl_certificate     /etc/ssl/certs/hernandes.cloud.fullchain.pem;
+    ssl_certificate_key /etc/ssl/private/hernandes.cloud.key;
 
     root /opt/kb-hernandes-cloud/public;
     index index.html;
@@ -69,21 +74,11 @@ server {
     location / {
         try_files $uri $uri.html $uri/ =404;
     }
-
-    ssl_certificate     /etc/letsencrypt/live/kb.hernandes.cloud/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/kb.hernandes.cloud/privkey.pem;
-}
-
-server {
-    listen 80;
-    server_name kb.hernandes.cloud;
-    return 301 https://$host$request_uri;
 }
 ```
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
-sudo certbot --nginx -d kb.hernandes.cloud
 ```
 
-(DNS wildcard `*.hernandes.cloud` déjà en place — pas d'enregistrement supplémentaire nécessaire.)
+(DNS wildcard `*.hernandes.cloud` déjà en place — pas d'enregistrement supplémentaire nécessaire. Renouvellement du certificat : géré par le cron acme.sh existant, rien de spécifique à `kb` à ajouter.)
