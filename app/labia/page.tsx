@@ -22,6 +22,16 @@ export default function LabiaPage() {
         avec plusieurs assistants IA spécialisés, chacun sur un registre
         différent.
       </p>
+      <Image
+        src="/images/projects/alicia-tool-example.png"
+        alt="Réponse d'AlicIA à une question sur la tendance météo"
+        width={930}
+        height={218}
+        className="mt-4 rounded border border-border"
+      />
+      <p className="mt-2 text-xs text-foreground/50">
+        Exemple réel : une question sur la météo des prochains jours.
+      </p>
 
       <section className="mt-10">
         <h2 className="flex items-center gap-3 text-xl font-semibold">
