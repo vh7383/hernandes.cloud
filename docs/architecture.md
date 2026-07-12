@@ -44,6 +44,18 @@ Site statique généré par [Quartz](https://quartz.jzhao.xyz/) à partir d'un e
 
 **Mise à jour du contenu** : relancer `node scripts/export-kb-skeleton.mjs '<chemin-vault>'` (écrase `kb/content/*.md` sauf `index.md`, géré à la main), committer, pousser — le build/déploiement suit automatiquement.
 
+**Clé SSH dédiée** : le job utilise `secrets.PI_KB_SSH_KEY`, distincte de `PI_SSH_KEY` (verrouillée sur `/opt/hernandes-cloud/deploy.sh` via `command=` dans `authorized_keys` — la réutiliser faisait échouer `rsync` en silence, cf. `docs/decisions.md`). Restreinte via `rrsync` au seul dossier kb :
+
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_github_kb -N "" -C "github-actions-kb-deploy"
+sudo mkdir -p /opt/kb-hernandes-cloud/public
+sudo chown -R $(whoami):$(whoami) /opt/kb-hernandes-cloud
+echo -n 'command="/usr/bin/rrsync /opt/kb-hernandes-cloud/public",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ' \
+  | cat - ~/.ssh/id_ed25519_github_kb.pub >> ~/.ssh/authorized_keys
+```
+
+Puis coller `~/.ssh/id_ed25519_github_kb` (clé privée) dans le secret GitHub `PI_KB_SSH_KEY`.
+
 **Configuration nginx sur le Pi (à poser une fois, manuellement)** :
 
 ```nginx
@@ -70,7 +82,6 @@ server {
 ```
 
 ```bash
-sudo mkdir -p /opt/kb-hernandes-cloud/public
 sudo nginx -t && sudo systemctl reload nginx
 sudo certbot --nginx -d kb.hernandes.cloud
 ```
