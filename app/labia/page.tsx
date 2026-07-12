@@ -14,10 +14,13 @@ export default function LabiaPage() {
         LabIA, c&apos;est mon laboratoire IA personnel : un espace où j&apos;apprends
         en observant plusieurs IA travailler, plutôt qu&apos;en bricolant seul dans
         mon coin. Au centre, <strong className="text-foreground">AlicIA</strong>{" "}
-        — ma résidente, qui tourne en local (OpenClaw + Ollama) avec un vrai accès
-        fichiers et exécution sur ma machine, jamais exposée publiquement. Autour
-        d&apos;elle, je collabore avec plusieurs assistants IA spécialisés,
-        chacun sur un registre différent.
+        — ma résidente, qui tourne en local avec un vrai accès fichiers, exécution
+        et outils externes sur ma machine — elle peut par exemple aller chercher
+        une information en direct plutôt que deviner — jamais exposée
+        publiquement. Les détails techniques vivent dans ma base de
+        connaissances (lien plus bas), pas ici. Autour d&apos;elle, je collabore
+        avec plusieurs assistants IA spécialisés, chacun sur un registre
+        différent.
       </p>
 
       <section className="mt-10">
@@ -75,9 +78,8 @@ export default function LabiaPage() {
           seul agent.
         </p>
         <p className="mt-3 text-foreground/70">
-          Gabrielle n&apos;est pas seule dans la maison. AlicIA se factorise en
-          plusieurs rôles — cliquez sur un visage pour en savoir plus sur
-          chacun.
+          Gabrielle n&apos;est pas seule dans la maison. Cliquez sur un visage
+          pour en savoir plus sur chacun.
         </p>
         <PersonaGrid />
       </section>
@@ -130,17 +132,27 @@ export default function LabiaPage() {
           depuis l&apos;intérieur, par l&apos;agent lui-même.
         </p>
         <p className="mt-3 text-foreground/70">
-          Voici un extrait du graphe qui a émergé de tout ça — construit au
-          fil de mes lectures et de mes expérimentations, pas dessiné à
-          l&apos;avance.
+          Le graphe qui en émerge — construit au fil de mes lectures et de
+          mes expérimentations, pas dessiné à l&apos;avance — se consulte en
+          direct :
         </p>
-        <Image
-          src="/images/projects/alicia-knowledge-graph.png"
-          alt="Graphe de connaissances Obsidian autour des notes LLM/RAG/agents"
-          width={1293}
-          height={1067}
-          className="mt-4 rounded border border-border"
-        />
+        <a
+          href="https://kb.hernandes.cloud"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 flex items-center justify-between rounded border border-border bg-surface px-5 py-4 transition hover:border-brand"
+        >
+          <span>
+            <span className="block font-medium text-foreground">
+              Explorer la carte de connaissances
+            </span>
+            <span className="block text-sm text-foreground/60">
+              kb.hernandes.cloud — titres et liens seulement, mon vault reste
+              privé
+            </span>
+          </span>
+          <span className="text-brand">↗</span>
+        </a>
       </section>
 
       <section className="mt-10">
