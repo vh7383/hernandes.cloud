@@ -52,3 +52,36 @@ jobs:
             cd /opt/hernandes-cloud
             docker compose pull
             docker compose up -d
+
+  # kb.hernandes.cloud : site statique Quartz (carte du vault LabIA, cf.
+  # docs/decisions.md). Pas de Docker/arm64 ici — c'est du HTML/CSS/JS pur,
+  # buildable sur n'importe quelle archi et servi directement par nginx sur
+  # le Pi (bloc nginx à poser manuellement, cf. recette).
+  build-and-deploy-kb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installer les dépendances de kb
+        working-directory: kb
+        run: npm ci
+
+      - name: Builder kb (Quartz)
+        working-directory: kb
+        run: npx quartz build
+
+      - name: Configurer SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.PI_SSH_KEY }}
+
+      - name: Déployer kb sur le Pi
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.PI_HOST }} >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} "mkdir -p /opt/kb-hernandes-cloud/public"
+          rsync -avz --delete kb/public/ ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }}:/opt/kb-hernandes-cloud/public/

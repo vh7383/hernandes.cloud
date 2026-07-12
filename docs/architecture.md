@@ -37,3 +37,42 @@ Kali est une machine dédiée, sans usage interactif concurrent. `lib/kaliSleepS
 ## Gabrielle vs AlicIA
 
 AlicIA (le lab IA personnel, OpenClaw + Ollama, avec accès `exec`/fichiers) ne doit jamais être exposée publiquement. **Gabrielle** est le rôle d'accueil que joue AlicIA sur ce site : un petit modèle (0.5B) servi par llama.cpp sur le Pi, avec RAG géré côté serveur — même ton/persona, aucune capacité d'action réelle, aucun outil branché.
+
+## kb.hernandes.cloud — carte du vault LabIA (Quartz)
+
+Site statique généré par [Quartz](https://quartz.jzhao.xyz/) à partir d'un export du vault privé LabIA (`kb/content/`, régénéré par `scripts/export-kb-skeleton.mjs`) — **titres et liens uniquement, jamais le corps des notes** : le vault reste privé (ADR-005), seule sa topologie est publique. Buildé en CI (job `build-and-deploy-kb`, `ubuntu-latest` — pur HTML/CSS/JS, pas de cross-build arm64 nécessaire) et déployé par `rsync` vers `/opt/kb-hernandes-cloud/public/` sur le Pi. Aucun conteneur : nginx sert directement ce dossier, comme n'importe quel site statique.
+
+**Mise à jour du contenu** : relancer `node scripts/export-kb-skeleton.mjs '<chemin-vault>'` (écrase `kb/content/*.md` sauf `index.md`, géré à la main), committer, pousser — le build/déploiement suit automatiquement.
+
+**Configuration nginx sur le Pi (à poser une fois, manuellement)** :
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name kb.hernandes.cloud;
+
+    root /opt/kb-hernandes-cloud/public;
+    index index.html;
+
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+
+    ssl_certificate     /etc/letsencrypt/live/kb.hernandes.cloud/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/kb.hernandes.cloud/privkey.pem;
+}
+
+server {
+    listen 80;
+    server_name kb.hernandes.cloud;
+    return 301 https://$host$request_uri;
+}
+```
+
+```bash
+sudo mkdir -p /opt/kb-hernandes-cloud/public
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d kb.hernandes.cloud
+```
+
+(DNS wildcard `*.hernandes.cloud` déjà en place — pas d'enregistrement supplémentaire nécessaire.)

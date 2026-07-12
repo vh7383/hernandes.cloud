@@ -37,6 +37,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# kb (Quartz) -- cf. docs/decisions.md
+kb/node_modules
+kb/public
+kb/.quartz
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
