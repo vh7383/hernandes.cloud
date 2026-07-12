@@ -86,8 +86,14 @@ jobs:
           ssh-private-key: ${{ secrets.PI_SSH_KEY }}
 
       - name: Déployer kb sur le Pi
+        env:
+          # Force rsync à utiliser exactement le même transport SSH que le
+          # mkdir juste avant -- rsync sans -e/RSYNC_RSH explicite avait
+          # échoué (connexion coupée en plein protocole), cause pas
+          # confirmée (pas MOTD, pas .bashrc, rsync bien installé sur le Pi).
+          RSYNC_RSH: ssh -o StrictHostKeyChecking=no
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.PI_HOST }} >> ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} "mkdir -p /opt/kb-hernandes-cloud/public"
-          rsync -avz --delete kb/public/ ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }}:/opt/kb-hernandes-cloud/public/
+          rsync -avzi --stats --delete kb/public/ ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }}:/opt/kb-hernandes-cloud/public/
