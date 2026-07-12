@@ -99,8 +99,8 @@ export default function LabiaPage() {
           seul agent.
         </p>
         <p className="mt-3 text-foreground/70">
-          Gabrielle n&apos;est pas seule dans la maison. Cliquez sur eux pour
-          en savoir plus sur chacun.
+          Gabrielle n&apos;est pas seule dans la maison. Cliquer sur eux pour
+          en savoir plus.
         </p>
         <PersonaGrid />
       </section>
