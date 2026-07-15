@@ -34,7 +34,7 @@ export const projects: Project[] = [
     stack: ["Ollama", "OpenClaw", "LangGraph", "LangSmith", "Multi-agent"],
     links: {
       page: "/labia",
-      board: "https://trello.com/b/oCFRPLk6/alicia-%F0%9F%A7%AA",
+      board: "https://trello.com/b/VDzfOOrX/%F0%9F%A7%A0-labia-suivi-public",
     },
     status: "active",
   },
