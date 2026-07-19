@@ -1,7 +1,4 @@
 import { services, type ServiceTarget } from "@/content/services";
-import { wakeTargets } from "@/lib/wakeTargets";
-import { isReachable } from "@/lib/reachability";
-import { recordActivity } from "@/lib/activityTracker";
 
 export interface ServiceStatus {
   name: string;
@@ -58,19 +55,18 @@ export async function getAllServiceStatuses(): Promise<ServiceStatus[]> {
 }
 
 /**
- * Kali/Elastic n'est pas dans content/services.ts (ce n'est pas un lien de
- * la page /services) et n'est pas réveillée automatiquement — cf.
- * docs/decisions.md. On vérifie juste un port TCP, sans tenter de réveil.
- *
- * Important : on enregistre une activité quand elle répond, pour que le
- * planificateur de veille (lib/kaliSleepScheduler.ts) sache que quelqu'un
- * consulte activement le monitoring — sinon, dès que Vincent l'allume à la
- * main, le premier tick du planificateur la rendormirait immédiatement faute
- * d'activité enregistrée.
+ * Le tableau de bord public est un dashboard Grafana hébergé sur le Pi
+ * (toujours allumé) — plus l'ancien plan Kali/Elastic (jamais concrétisé,
+ * cf. docs/decisions.md). On vérifie juste que le lien public répond.
  */
 export async function getMonitoringStatus(): Promise<"up" | "down"> {
-  const kali = wakeTargets.kali;
-  const reachable = await isReachable(kali.ip, kali.checkPort, 3000);
-  if (reachable) recordActivity("kali");
-  return reachable ? "up" : "down";
+  const embedUrl = process.env.NEXT_PUBLIC_MONITORING_EMBED_URL;
+  if (!embedUrl) return "down";
+
+  try {
+    const res = await fetchWithTimeout(embedUrl, "HEAD");
+    return res.status < 500 ? "up" : "down";
+  } catch {
+    return "down";
+  }
 }
