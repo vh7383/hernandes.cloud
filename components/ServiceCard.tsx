@@ -3,6 +3,26 @@ import type { ServiceTarget } from "@/content/services";
 
 export default function ServiceCard({ service }: { service: ServiceTarget }) {
   if (service.comingSoon) {
+    if (service.screenshot) {
+      return (
+        <div className="flex flex-col overflow-hidden rounded-lg border border-dashed border-border bg-surface opacity-70">
+          <div className="relative aspect-[16/9] w-full overflow-hidden">
+            <Image
+              src={service.screenshot}
+              alt={`Écran de connexion de ${service.publicLabel}`}
+              fill
+              className="object-cover grayscale"
+            />
+            <span className="absolute right-2 top-2 rounded-full border border-border bg-background/80 px-2 py-0.5 text-xs text-foreground/70">
+              bientôt
+            </span>
+          </div>
+          <span className="px-4 py-3 text-center text-sm font-medium">
+            {service.publicLabel}
+          </span>
+        </div>
+      );
+    }
     return (
       <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border p-6 text-center text-foreground/50">
         <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border text-xs">
