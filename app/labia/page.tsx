@@ -43,6 +43,20 @@ export default function LabiaPage() {
         Autre exemple : elle appelle un outil, en observe le résultat, puis
         l&apos;exploite dans sa réponse — identifiants internes masqués.
       </p>
+      <Image
+        src="/images/projects/alicia-telegram-memory-example.png"
+        alt="Échange Telegram avec AlicIA, qui propose un script en s'appuyant sur des discussions passées"
+        width={372}
+        height={588}
+        className="mt-6 rounded border border-border"
+      />
+      <p className="mt-2 text-xs text-foreground/50">
+        Dernier exemple : je lui parle aussi sur Telegram, et pas seulement
+        pour répondre — ici elle propose spontanément un script en
+        s&apos;appuyant sur des discussions passées (le code n&apos;était pas
+        juste, mais elle a bien mobilisé sa mémoire plutôt que de repartir de
+        zéro).
+      </p>
 
       <section className="mt-10">
         <h2 className="flex items-center gap-3 text-xl font-semibold">
@@ -236,7 +250,7 @@ export default function LabiaPage() {
           L&apos;avancement (fondations, identité, communication,
           expérimentations en cours) est suivi publiquement sur mon board{" "}
           <a
-            href="https://trello.com/b/oCFRPLk6/alicia-%F0%9F%A7%AA"
+            href="https://trello.com/b/VDzfOOrX/%F0%9F%A7%A0-labia-suivi-public"
             target="_blank"
             rel="noopener noreferrer"
             className="text-brand hover:underline"

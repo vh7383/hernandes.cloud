@@ -9,6 +9,8 @@ export interface ServiceTarget {
   logo?: string;
   /** Repli si pas de fichier logo : emoji/glyphe simple, cf. docs/decisions.md. */
   icon?: string;
+  /** Vraie capture de l'écran de connexion du service, prioritaire sur logo/icon (cf. ServiceCard). */
+  screenshot?: string;
   /** Regroupement visuel sur /services (cf. app/services/page.tsx). */
   group: "pi" | "nas";
   /** Services pas encore exposés publiquement. */
@@ -58,6 +60,7 @@ export const services: ServiceTarget[] = [
     url: "https://photo.hernandes.cloud:5443",
     publicLabel: "Photos",
     logo: "/images/synology/photos.svg",
+    screenshot: "/images/synology/photos-screenshot.jpg",
     group: "nas",
   },
   {
@@ -65,6 +68,7 @@ export const services: ServiceTarget[] = [
     url: "https://cam.hernandes.cloud:9901",
     publicLabel: "Vidéosurveillance",
     logo: "/images/synology/surveillance.svg",
+    screenshot: "/images/synology/surveillance-screenshot.jpg",
     group: "nas",
   },
   {
@@ -72,6 +76,7 @@ export const services: ServiceTarget[] = [
     url: "https://syno-drive.hernandes.cloud:10003",
     publicLabel: "Synology Drive",
     logo: "/images/synology/synology-drive.svg",
+    screenshot: "/images/synology/synology-drive-screenshot.jpg",
     group: "nas",
   },
   {
@@ -79,6 +84,7 @@ export const services: ServiceTarget[] = [
     url: "https://file.hernandes.cloud:7001",
     publicLabel: "File Station",
     logo: "/images/synology/file-station.svg",
+    screenshot: "/images/synology/file-station-screenshot.jpg",
     group: "nas",
   },
   {
@@ -86,6 +92,7 @@ export const services: ServiceTarget[] = [
     url: "https://note.hernandes.cloud:9351",
     publicLabel: "Note Station",
     logo: "/images/synology/note-station.svg",
+    screenshot: "/images/synology/note-station-screenshot.jpg",
     group: "nas",
   },
   {
@@ -93,6 +100,7 @@ export const services: ServiceTarget[] = [
     url: "https://audio.hernandes.cloud:8801",
     publicLabel: "Audio Station",
     logo: "/images/synology/audio-station.svg",
+    screenshot: "/images/synology/audio-station-screenshot.jpg",
     group: "nas",
   },
   {
@@ -100,6 +108,7 @@ export const services: ServiceTarget[] = [
     url: "https://contacts.hernandes.cloud:25556",
     publicLabel: "Contacts",
     logo: "/images/synology/contacts.svg",
+    screenshot: "/images/synology/contacts-screenshot.jpg",
     group: "nas",
   },
   {
@@ -107,6 +116,7 @@ export const services: ServiceTarget[] = [
     url: "https://nas.hernandes.cloud",
     publicLabel: "DSM",
     logo: "/images/synology/dsm.svg",
+    screenshot: "/images/synology/dsm-screenshot.jpg",
     group: "nas",
     comingSoon: true,
   },

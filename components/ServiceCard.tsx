@@ -13,6 +13,29 @@ export default function ServiceCard({ service }: { service: ServiceTarget }) {
     );
   }
 
+  if (service.screenshot) {
+    return (
+      <a
+        href={service.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex flex-col overflow-hidden rounded-lg border border-border bg-surface transition-colors hover:border-brand"
+      >
+        <div className="relative aspect-[16/9] w-full overflow-hidden">
+          <Image
+            src={service.screenshot}
+            alt={`Écran de connexion de ${service.publicLabel}`}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+        <span className="px-4 py-3 text-center text-sm font-medium">
+          {service.publicLabel}
+        </span>
+      </a>
+    );
+  }
+
   return (
     <a
       href={service.url}
