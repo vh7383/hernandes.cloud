@@ -53,50 +53,6 @@ jobs:
             docker compose pull
             docker compose up -d
 
-  # kb.hernandes.cloud : site statique Quartz (carte du vault LabIA, cf.
-  # docs/decisions.md). Pas de Docker/arm64 ici — c'est du HTML/CSS/JS pur,
-  # buildable sur n'importe quelle archi et servi directement par nginx sur
-  # le Pi (bloc nginx à poser manuellement, cf. recette). Tourne en
-  # parallèle de build-and-push/deploy (pas de needs) -- clé SSH dédiée,
-  # cible un dossier distinct, aucun conflit avec le déploiement principal.
-  build-and-deploy-kb:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Installer les dépendances de kb
-        working-directory: kb
-        run: npm ci
-
-      # .quartz/ (résolution des plugins) est régénéré à chaque run plutôt
-      # que committé — pesait ~900 Mo avec l'historique git de chaque plugin.
-      - name: Installer les plugins Quartz (depuis quartz.lock.json)
-        working-directory: kb
-        run: node quartz/bootstrap-cli.mjs plugin install
-
-      - name: Builder kb (Quartz)
-        working-directory: kb
-        run: npx quartz build
-
-      # PI_SSH_KEY (utilisée par le job "deploy") est verrouillée côté Pi sur
-      # /opt/hernandes-cloud/deploy.sh (command= dans authorized_keys) -- la
-      # réutiliser ici forçait silencieusement ce script au lieu de
-      # mkdir/rsync, d'où l'échec rsync systématique. Clé dédiée,
-      # restreinte via rrsync au seul dossier kb (cf. docs/architecture.md).
-      - name: Configurer SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.PI_KB_SSH_KEY }}
-
-      - name: Déployer kb sur le Pi
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.PI_HOST }} >> ~/.ssh/known_hosts
-          # Destination vide : rrsync côté Pi préfixe déjà avec le dossier
-          # restreint (/opt/kb-hernandes-cloud/public) -- le repréciser ici
-          # le doublait ("…/public/opt/kb-hernandes-cloud/public").
-          rsync -avzi --stats --delete -e "ssh -o StrictHostKeyChecking=no" kb/public/ ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }}:
+  # kb.hernandes.cloud a demenage vers son propre depot dedie et sa propre
+  # CI (github.com/vh7383/kb.hernandes.cloud) -- plus de job ici, cf.
+  # docs/decisions.md.

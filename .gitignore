@@ -37,11 +37,10 @@ yarn-error.log*
 # vercel
 .vercel
 
-# kb (Quartz) -- cf. docs/decisions.md
-kb/node_modules
-kb/public
-kb/.quartz
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# artefacts NTFS Windows (mark-of-the-web sur fichiers touchés depuis
+# l'explorateur/un éditeur Windows via le chemin UNC WSL) -- sans valeur.
+*:Zone.Identifier

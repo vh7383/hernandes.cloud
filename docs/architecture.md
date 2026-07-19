@@ -40,45 +40,4 @@ AlicIA (le lab IA personnel, OpenClaw + Ollama, avec accès `exec`/fichiers) ne 
 
 ## kb.hernandes.cloud — carte du vault LabIA (Quartz)
 
-Site statique généré par [Quartz](https://quartz.jzhao.xyz/) à partir d'un export du vault privé LabIA (`kb/content/`, régénéré par `scripts/export-kb-skeleton.mjs`) — **titres et liens uniquement, jamais le corps des notes** : le vault reste privé (ADR-005), seule sa topologie est publique. Buildé en CI (job `build-and-deploy-kb`, `ubuntu-latest` — pur HTML/CSS/JS, pas de cross-build arm64 nécessaire) et déployé par `rsync` vers `/opt/kb-hernandes-cloud/public/` sur le Pi. Aucun conteneur : nginx sert directement ce dossier, comme n'importe quel site statique.
-
-**Mise à jour du contenu** : relancer `node scripts/export-kb-skeleton.mjs '<chemin-vault>'` (écrase `kb/content/*.md` sauf `index.md`, géré à la main), committer, pousser — le build/déploiement suit automatiquement.
-
-**Clé SSH dédiée** : le job utilise `secrets.PI_KB_SSH_KEY`, distincte de `PI_SSH_KEY` (verrouillée sur `/opt/hernandes-cloud/deploy.sh` via `command=` dans `authorized_keys` — la réutiliser faisait échouer `rsync` en silence, cf. `docs/decisions.md`). Restreinte via `rrsync` au seul dossier kb :
-
-```bash
-ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_github_kb -N "" -C "github-actions-kb-deploy"
-sudo mkdir -p /opt/kb-hernandes-cloud/public
-sudo chown -R $(whoami):$(whoami) /opt/kb-hernandes-cloud
-echo -n 'command="/usr/bin/rrsync /opt/kb-hernandes-cloud/public",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ' \
-  | cat - ~/.ssh/id_ed25519_github_kb.pub >> ~/.ssh/authorized_keys
-```
-
-Puis coller `~/.ssh/id_ed25519_github_kb` (clé privée) dans le secret GitHub `PI_KB_SSH_KEY`.
-
-**Configuration nginx sur le Pi (à poser une fois, manuellement)** :
-
-`hernandes.cloud` a un certificat **wildcard** (`*.hernandes.cloud`, émis via acme.sh/ZeroSSL — pas certbot, retiré depuis) qui couvre déjà tous les sous-domaines de premier niveau. Pas besoin d'émettre un certificat dédié pour `kb` : on réutilise les mêmes fichiers, et le redirect HTTP→HTTPS pour `*.hernandes.cloud` est déjà géré globalement par le bloc port 80 existant de `hernandes.cloud`.
-
-```nginx
-server {
-    listen 443 ssl;
-    server_name kb.hernandes.cloud;
-
-    ssl_certificate     /etc/ssl/certs/hernandes.cloud.fullchain.pem;
-    ssl_certificate_key /etc/ssl/private/hernandes.cloud.key;
-
-    root /opt/kb-hernandes-cloud/public;
-    index index.html;
-
-    location / {
-        try_files $uri $uri.html $uri/ =404;
-    }
-}
-```
-
-```bash
-sudo nginx -t && sudo systemctl reload nginx
-```
-
-(DNS wildcard `*.hernandes.cloud` déjà en place — pas d'enregistrement supplémentaire nécessaire. Renouvellement du certificat : géré par le cron acme.sh existant, rien de spécifique à `kb` à ajouter.)
+Vit désormais dans son **propre dépôt dédié** ([`vh7383/kb.hernandes.cloud`](https://github.com/vh7383/kb.hernandes.cloud)), avec sa propre CI/CD — plus rien dans ce dépôt-ci (l'ancienne intégration embarquée sous `kb/` a été retirée, cf. `docs/decisions.md`). Toujours un site statique Quartz, servi par nginx sur le Pi, sur le certificat wildcard `*.hernandes.cloud` déjà en place.

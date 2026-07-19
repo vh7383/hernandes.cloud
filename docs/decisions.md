@@ -248,3 +248,7 @@ Vincent voulait voir les 4 états sans devoir passer par une vraie conversation 
 ## 2026-07-12 — kb.hernandes.cloud (Quartz) : incident de déploiement CI/CD
 
 Le premier déploiement du job CI de `kb.hernandes.cloud` a échoué six fois de suite sur trois causes indépendantes (dossier de build généré non versionné, réutilisation d'un accès SSH restreint à un usage différent de celui prévu, documentation TLS obsolète) avant résolution complète — voir le postmortem détaillé : [`docs/postmortems/2026-07-12-kb-deploy-cicd.md`](postmortems/2026-07-12-kb-deploy-cicd.md). Aucun impact sur `hernandes.cloud`, résolu sans perte de données.
+
+## 2026-07-19 — kb.hernandes.cloud migré vers un dépôt dédié
+
+L'intégration Quartz embarquée (`kb/`, `scripts/export-kb-skeleton.mjs`, job CI `build-and-deploy-kb`) est retirée de ce dépôt : `kb.hernandes.cloud` vit désormais dans son propre dépôt (`vh7383/kb.hernandes.cloud`), avec sa propre CI/CD indépendante. Raison : découplage jugé plus sain pour un site à la nature différente (généré depuis un vault externe, cadence de mise à jour propre) plutôt que de le faire porter par le pipeline du portfolio principal. Le certificat wildcard et la config nginx existants sur le Pi restent inchangés — seul le mécanisme de build/déploiement change de dépôt. Le postmortem du 2026-07-12 ci-dessus reste valable tel quel : il documente un incident réel survenu sous l'ancienne architecture.

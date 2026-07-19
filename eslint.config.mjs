@@ -12,8 +12,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // kb/ : source Quartz, projet indépendant avec ses propres conventions.
-    "kb/**",
   ]),
 ]);
 
