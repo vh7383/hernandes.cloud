@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -51,6 +52,25 @@ export default function InfraPage() {
             dédiée monitoring/sécurité, réveillée à la demande pour la démo.
           </li>
         </ul>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-xl font-semibold">Topologie réseau</h2>
+        <p className="mt-3 text-foreground/70">
+          Générée par un script perso qui découvre le LAN, plutôt que
+          dessinée à la main — routeur, switch, WiFi, et ce qui est branché
+          derrière. Noms et adresses réels remplacés par des rôles génériques.
+          Le pont domotique pilote aussi de l&apos;éclairage en Zigbee,
+          un réseau à part, invisible depuis le LAN — d&apos;où le trait en
+          pointillés.
+        </p>
+        <Image
+          src="/images/infra/network-topology.svg"
+          alt="Topologie du réseau domestique : routeur, switch, WiFi, et les appareils connectés"
+          width={782}
+          height={1106}
+          className="mt-4 h-auto w-full max-w-md rounded-lg border border-border"
+        />
       </section>
 
       <section className="mt-10">

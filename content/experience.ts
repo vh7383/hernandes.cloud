@@ -11,7 +11,7 @@ export interface ExperienceEntry {
 
 export const experience: ExperienceEntry[] = [
   {
-    period: "Juin 2025 — Présent",
+    period: "Juin 2025 — Janvier 2026",
     title: "Administrateur Systèmes & Réseaux · Référent technique projets",
     company: "Qualitanie",
     location: "Saverdun / Toulouse",
