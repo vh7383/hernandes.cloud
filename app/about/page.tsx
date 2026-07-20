@@ -38,15 +38,17 @@ export default function AboutPage() {
         </div>
       </div>
       <p className="mt-4 text-foreground/70">
-        Je m&apos;appelle Vincent Hernandes — Ingénieur Infrastructure &amp;
-        DevOps. Basé à Toulouse, ouvert à la mobilité internationale.
+        Je m&apos;appelle Vincent Hernandes — spécialisé en architecture et
+        ingénierie des systèmes et logiciels. Basé à Toulouse, ouvert à la
+        mobilité internationale.
         N&apos;hésitez pas à me contacter pour échanger ou collaborer !
       </p>
 
       <section className="mt-10">
         <h2 className="text-xl font-semibold">Qui suis-je ?</h2>
         <p className="mt-3 text-foreground/70">
-          Ingénieur infrastructure en fin de cursus CNAM (niveau 7 CEC), venu
+          Ingénieur en architecture et ingénierie des systèmes et logiciels,
+          en fin de cursus CNAM (niveau 7 CEC), venu
           du terrain : 7 ans de progression du support N1 à la conception
           d&apos;architectures et à la référence technique projets. Double
           culture systèmes/réseaux et ingénierie logicielle, forgée en

@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 const SITE_URL = "https://hernandes.cloud";
 const SITE_DESCRIPTION =
-  "Portfolio de Vincent Hernandes, ingénieur infrastructure & DevOps : projets, compétences techniques et système auto-hébergé (Docker, monitoring, IA locale). Découvrez mes réalisations et contactez-moi pour toute collaboration.";
+  "Portfolio de Vincent Hernandes, spécialisé en architecture et ingénierie des systèmes et logiciels : projets, compétences techniques et système auto-hébergé (Docker, monitoring, IA locale). Découvrez mes réalisations et contactez-moi pour toute collaboration.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         url: "/images/og-image.png",
         width: 1200,
         height: 627,
-        alt: "Vincent Hernandes — Ingénieur Infrastructure & DevOps",
+        alt: "Vincent Hernandes — Architecture & ingénierie systèmes/logiciels",
       },
     ],
   },
