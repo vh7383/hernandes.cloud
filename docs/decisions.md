@@ -252,3 +252,17 @@ Le premier déploiement du job CI de `kb.hernandes.cloud` a échoué six fois de
 ## 2026-07-19 — kb.hernandes.cloud migré vers un dépôt dédié
 
 L'intégration Quartz embarquée (`kb/`, `scripts/export-kb-skeleton.mjs`, job CI `build-and-deploy-kb`) est retirée de ce dépôt : `kb.hernandes.cloud` vit désormais dans son propre dépôt (`vh7383/kb.hernandes.cloud`), avec sa propre CI/CD indépendante. Raison : découplage jugé plus sain pour un site à la nature différente (généré depuis un vault externe, cadence de mise à jour propre) plutôt que de le faire porter par le pipeline du portfolio principal. Le certificat wildcard et la config nginx existants sur le Pi restent inchangés — seul le mécanisme de build/déploiement change de dépôt. Le postmortem du 2026-07-12 ci-dessus reste valable tel quel : il documente un incident réel survenu sous l'ancienne architecture.
+
+## 2026-07-21 — NAS Synology reverse-proxifié : URLs sans port
+
+Le certificat TLS du NAS est désormais le même que celui partagé par le Pi (au lieu du certificat par défaut du NAS, cf. entrée du 2026-07-06 ci-dessus), et chaque service DSM est reverse-proxifié plutôt qu'exposé directement sur son port applicatif (`:5443`, `:9901`, `:10003`, `:7001`, `:9351`, `:8801`, `:25556`). Conséquence : les URLs publiques n'ont plus besoin du port — `photo.hernandes.cloud` répond directement, `photo.hernandes.cloud:5443` non.
+
+`content/services.ts` mis à jour en conséquence (les 7 services NAS concernés). Comme `lib/status.ts` ping directement `service.url`, `/monitoring` reflète déjà la bonne URL sans changement de code côté check de disponibilité. Seul `dsm` (`nas.hernandes.cloud`) reste marqué `comingSoon` — l'alias DSM lui-même n'est pas confirmé configuré, indépendamment de ce changement de reverse proxy.
+
+## 2026-07-21 — Clarification PLG/ELK + retrait de l'automation de veille Kali
+
+Deux confusions corrigées dans `docs/architecture.md` : (1) le dashboard public de `/monitoring` est la stack **PLG** (Prometheus/Loki/Grafana) sur le Pi, toujours allumée — pas Elastic sur Kali comme le décrivait encore la doc ; (2) Kali héberge bien une stack **ELK**, mais à usage personnel (travaux, apprentissage), privée et non exposée sur le site, sans lien avec le monitoring public.
+
+En creusant cette confusion, un résidu de code a été repéré : `lib/activityTracker.ts` exposait `recordActivity()`, jamais appelé nulle part — l'automation de mise en veille de Kali (`lib/kaliSleepScheduler.ts`) ne voyait donc jamais d'activité réelle. Plutôt que de re-brancher ce suivi, décision de **retirer entièrement l'automation** : Kali est gérée manuellement par Vincent (allumage/veille), aucun besoin d'un mécanisme côté site. Fichiers supprimés : `lib/kaliSleepScheduler.ts`, `lib/activityTracker.ts`, `lib/wakeTargets.ts`, `lib/reachability.ts`, `instrumentation.ts` (qui ne servait qu'à démarrer ce planificateur). Retiré en conséquence : le montage de la clé SSH Pi→Kali dans `docker-compose.yml`, et les variables `KALI_SERVICE_PORT`/`KALI_SSH_USER`/`KALI_SSH_KEY_PATH` dans `.env.example`.
+
+`components/MonitoringEmbed.tsx` corrigé au passage : le message affiché quand le dashboard est indisponible mentionnait à tort un réveil manuel de Kali, alors que la disponibilité vient de `getMonitoringStatus()` (Grafana sur le Pi), sans rapport avec Kali.

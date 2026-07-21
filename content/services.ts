@@ -48,16 +48,14 @@ export const services: ServiceTarget[] = [
     group: "pi",
   },
 
-  // --- NAS Synology (DS218play) --- alias + ports HTTPS configurés dans le
-  // portail d'applications DSM (Panneau de configuration > Portail de
-  // connexion > Applications), confirmés joignables depuis l'extérieur le
-  // 2026-07-06. Le certificat TLS présenté est encore celui par défaut du NAS
-  // (pas le certificat partagé avec le Pi) — cf. docs/decisions.md — donc ces
-  // services peuvent apparaître "indisponible" côté /monitoring tant que ce
-  // n'est pas resynchronisé, même si les URLs répondent réellement.
+  // --- NAS Synology (DS218play) --- reverse-proxifié depuis le 2026-07-21 :
+  // le NAS n'expose plus ses ports DSM (5443, 9901, ...) directement, le
+  // certificat TLS est désormais le même que celui partagé par le Pi
+  // (cf. docs/decisions.md). Chaque service répond sur son sous-domaine nu,
+  // sans port, comme n'importe quel autre service de ce site.
   {
     name: "photos",
-    url: "https://photo.hernandes.cloud:5443",
+    url: "https://photo.hernandes.cloud",
     publicLabel: "Photos",
     logo: "/images/synology/photos.svg",
     screenshot: "/images/synology/photos-screenshot.jpg",
@@ -65,7 +63,7 @@ export const services: ServiceTarget[] = [
   },
   {
     name: "surveillance",
-    url: "https://cam.hernandes.cloud:9901",
+    url: "https://cam.hernandes.cloud",
     publicLabel: "Vidéosurveillance",
     logo: "/images/synology/surveillance.svg",
     screenshot: "/images/synology/surveillance-screenshot.jpg",
@@ -73,7 +71,7 @@ export const services: ServiceTarget[] = [
   },
   {
     name: "synology-drive",
-    url: "https://syno-drive.hernandes.cloud:10003",
+    url: "https://syno-drive.hernandes.cloud",
     publicLabel: "Synology Drive",
     logo: "/images/synology/synology-drive.svg",
     screenshot: "/images/synology/synology-drive-screenshot.jpg",
@@ -81,7 +79,7 @@ export const services: ServiceTarget[] = [
   },
   {
     name: "file-station",
-    url: "https://file.hernandes.cloud:7001",
+    url: "https://file.hernandes.cloud",
     publicLabel: "File Station",
     logo: "/images/synology/file-station.svg",
     screenshot: "/images/synology/file-station-screenshot.jpg",
@@ -89,7 +87,7 @@ export const services: ServiceTarget[] = [
   },
   {
     name: "note-station",
-    url: "https://note.hernandes.cloud:9351",
+    url: "https://note.hernandes.cloud",
     publicLabel: "Note Station",
     logo: "/images/synology/note-station.svg",
     screenshot: "/images/synology/note-station-screenshot.jpg",
@@ -97,7 +95,7 @@ export const services: ServiceTarget[] = [
   },
   {
     name: "audio-station",
-    url: "https://audio.hernandes.cloud:8801",
+    url: "https://audio.hernandes.cloud",
     publicLabel: "Audio Station",
     logo: "/images/synology/audio-station.svg",
     screenshot: "/images/synology/audio-station-screenshot.jpg",
@@ -105,7 +103,7 @@ export const services: ServiceTarget[] = [
   },
   {
     name: "contacts",
-    url: "https://contacts.hernandes.cloud:25556",
+    url: "https://contacts.hernandes.cloud",
     publicLabel: "Contacts",
     logo: "/images/synology/contacts.svg",
     screenshot: "/images/synology/contacts-screenshot.jpg",

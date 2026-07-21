@@ -11,7 +11,3 @@ services:
       - "127.0.0.1:3001:3000"
     env_file:
       - .env
-    volumes:
-      # Clé dédiée Pi -> Kali (restreinte à `systemctl suspend` côté Kali,
-      # cf. docs/decisions.md). Montée en lecture seule, jamais dans l'image.
-      - ${HOME}/.ssh/id_ed25519_kali:/root/.ssh/id_ed25519_kali:ro

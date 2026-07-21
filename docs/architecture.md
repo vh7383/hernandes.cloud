@@ -11,26 +11,25 @@
                     │  nginx + TLS   │
                     │  Next.js (app) │
                     │  llama.cpp     │  (Gabrielle, chat)
+                    │  PLG           │  (Prometheus/Loki/Grafana — monitoring public)
                     └───────┬───────┘
                             │ LAN 192.168.1.0/24
                             ▼
                     ┌───────────────┐
                     │      Kali      │
                     │  (dédiée sécu/ │
-                    │   monitoring)  │
-                    │    Elastic     │
+                    │   labo perso)  │
+                    │  ELK (privé)   │
                     └───────────────┘
 ```
 
-Le Pi héberge l'application Next.js (site, API routes) et le backend du chatbot (llama.cpp), tous deux toujours allumés — aucun réveil n'est nécessaire pour le chat. Kali héberge Elastic mais **n'est pas réveillée automatiquement** (voir note ci-dessous) : elle est allumée manuellement par Vincent quand le monitoring doit être montré.
+Le Pi héberge l'application Next.js (site, API routes), le backend du chatbot (llama.cpp) et la stack **PLG** (Prometheus/Loki/Grafana) qui monitore le Pi et alimente le tableau de bord public sur `/monitoring` — tout ça tourne 24/7, aucun réveil n'est nécessaire. Kali héberge en plus une stack **ELK** (Elasticsearch/Logstash/Kibana), mais à usage personnel (travaux, apprentissage) : privée, pas exposée sur le site, et pas en production au même sens que PLG. Kali **n'est pas réveillée automatiquement** (voir note ci-dessous) : elle est allumée manuellement par Vincent quand il en a besoin pour son propre usage.
 
-## Kali : pas de réveil automatique
+## Kali : gérée manuellement, aucune automation
 
-Kali n'a qu'une interface Wi-Fi ; un test réel (WoWLAN correctement armé côté machine, association Wi-Fi préservée pendant la veille) n'a quand même pas permis de la réveiller à distance — cause probable : la Freebox ne relaie pas fiablement les trames broadcast vers un client Wi-Fi endormi. Voir `docs/decisions.md` (2026-07-06) pour le détail du diagnostic. `/monitoring` affiche donc un état "indisponible" quand Kali dort, sans tentative de réveil.
+Kali n'a qu'une interface Wi-Fi ; un test réel de réveil à distance (WoWLAN correctement armé côté machine, association Wi-Fi préservée pendant la veille) n'a quand même pas permis de la réveiller — cause probable : la Freebox ne relaie pas fiablement les trames broadcast vers un client Wi-Fi endormi. Voir `docs/decisions.md` (2026-07-06) pour le détail du diagnostic.
 
-## Flux remise en veille — Kali uniquement
-
-Kali est une machine dédiée, sans usage interactif concurrent. `lib/kaliSleepScheduler.ts`, démarré au boot du serveur via `instrumentation.ts`, vérifie toutes les 5 min si Kali est jointe ET inactive depuis plus de 15 min (`lib/activityTracker`, alimenté par `lib/status.ts` à chaque consultation de `/monitoring` où elle répond) ; si oui, il déclenche `ssh vincent@<kali> "systemctl suspend"` avec la clé dédiée Pi→Kali (restreinte à cette seule commande, cf. `docs/decisions.md`). Non testé de bout en bout avant déploiement réel sur le Pi (la clé n'existe que là-bas).
+Suite à ce constat, l'automation de mise en veille par SSH (`lib/kaliSleepScheduler.ts`, `lib/activityTracker.ts`, `lib/wakeTargets.ts`, `lib/reachability.ts`, `instrumentation.ts`) a été retirée du dépôt (cf. `docs/decisions.md`, 2026-07-21) : Vincent allume et endort Kali lui-même selon ses besoins. Kali n'intervient de toute façon pas dans `/monitoring` (public, alimenté uniquement par le PLG du Pi) — son état n'affecte donc pas la page publique.
 
 (Un mécanisme équivalent existait pour un Desktop hébergeant le chatbot avant que celui-ci ne bascule sur le Pi — cf. `docs/decisions.md`, 2026-07-10 — retiré depuis, le Pi n'a pas besoin d'être réveillé puisqu'il tourne déjà 24/7.)
 

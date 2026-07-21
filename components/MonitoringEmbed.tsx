@@ -6,15 +6,14 @@ function PlaceholderCard({ message }: { message: string }) {
   );
 }
 
-// Slot prêt pour le futur dashboard Kibana/Grafana curé et anonymisé (cf.
-// docs/decisions.md) : l'activation se fera par une simple variable d'env,
-// sans redeploy de code, une fois le dashboard public configuré côté Kali.
+// Dashboard Grafana public (PLG sur le Pi, cf. docs/architecture.md) : URL
+// fournie par une simple variable d'env, sans redeploy de code.
 export default function MonitoringEmbed({ available }: { available: boolean }) {
   const embedUrl = process.env.NEXT_PUBLIC_MONITORING_EMBED_URL;
 
   if (!available) {
     return (
-      <PlaceholderCard message="Le service de monitoring est actuellement en veille — réveil manuel nécessaire (pas de Wake-on-LAN automatique en Wi-Fi, cf. docs/architecture.md)." />
+      <PlaceholderCard message="Le tableau de bord est temporairement indisponible." />
     );
   }
 
