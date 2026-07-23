@@ -12,7 +12,7 @@ Ce projet sert aussi de terrain d'apprentissage : Next.js/React, et la méthode 
 
 ## Particularité : Kali gérée manuellement
 
-Ma machine Kali (labo perso, ELK) ne reste **pas** allumée en permanence, contrairement au Pi qui héberge le site. Je l'allume et l'endors moi-même selon mes besoins — aucune automation de réveil ou de mise en veille dans ce dépôt (Wake-on-LAN abandonné pour cette machine, cf. `docs/decisions.md`). Le monitoring public du site (Grafana) et le chatbot (Gabrielle, llama.cpp) tournent tous les deux directement sur le Pi, donc aucun des deux ne dépend de Kali. Détails dans [`docs/architecture.md`](./docs/architecture.md).
+Ma machine Kali (labo perso, ELK) ne reste **pas** allumée en permanence, contrairement au Pi qui héberge le site. Je l'allume et l'endors moi-même selon mes besoins — aucune automation de réveil ou de mise en veille dans ce dépôt (Wake-on-LAN abandonné pour cette machine, cf. `docs/decisions.md`). Le monitoring public du site (Grafana) et le chatbot (l'API de Gabrielle) tournent tous les deux directement sur le Pi, donc aucun des deux ne dépend de Kali. Détails dans [`docs/architecture.md`](./docs/architecture.md).
 
 ## Développement local
 

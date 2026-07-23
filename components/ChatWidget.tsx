@@ -4,15 +4,37 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import PersonaHUD, { PERSONA_SIGIL_SRC, type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
 
+interface GabrielleSource {
+  provenance: string;
+  score: number;
+  contenu: string;
+}
+
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
+  /** Presente uniquement sur une reponse assistant de statut "sources". */
+  sources?: GabrielleSource[];
 }
 
 type Phase = "idle" | "sending" | "error";
 
 const GREETING =
   "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir — pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
+
+// Ephemere par onglet (sessionStorage, pas localStorage) : coherent avec un
+// chat d'accueil sans compte, pas besoin de survivre entre deux visites.
+// Gabrielle tronque a 64 caracteres cote serveur si besoin.
+const SESSION_STORAGE_KEY = "gabrielle-session";
+
+function getOrCreateSession(): string {
+  if (typeof window === "undefined") return "";
+  const existing = sessionStorage.getItem(SESSION_STORAGE_KEY);
+  if (existing) return existing;
+  const fresh = crypto.randomUUID();
+  sessionStorage.setItem(SESSION_STORAGE_KEY, fresh);
+  return fresh;
+}
 
 // Durée d'affichage de l'état "parle" après une réponse reçue, avant de
 // revenir à "idle" — purement cosmétique (cf. components/PersonaHUD.tsx).
@@ -44,6 +66,7 @@ export default function ChatWidget() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [justReplied, setJustReplied] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [session] = useState<string>(getOrCreateSession);
   const parleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // L'état animé (pense/parle/alerte) ne reflète une vraie activité que pour
@@ -63,8 +86,7 @@ export default function ChatWidget() {
     const text = input.trim();
     if (!text || phase === "sending") return;
 
-    const nextMessages: ChatMessage[] = [...messages, { role: "user", content: text }];
-    setMessages(nextMessages);
+    setMessages((prev) => [...prev, { role: "user", content: text }]);
     setInput("");
     setPhase("sending");
     setErrorMessage("");
@@ -73,7 +95,7 @@ export default function ChatWidget() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({ message: text, session }),
       });
 
       if (response.status === 429) {
@@ -89,7 +111,23 @@ export default function ChatWidget() {
       }
 
       const data = await response.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
+
+      // "indisponible" : le fond de connaissance (Raphaël) ne repond pas,
+      // reutilise le bloc d'erreur existant plutot qu'un tour de plus.
+      if (data.statut === "indisponible") {
+        setPhase("error");
+        setErrorMessage("Le fond de connaissance est momentanément indisponible.");
+        return;
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: data.reponse,
+          sources: data.statut === "sources" ? data.sources : undefined,
+        },
+      ]);
       setPhase("idle");
       setJustReplied(true);
       if (parleTimeout.current) clearTimeout(parleTimeout.current);
@@ -147,18 +185,34 @@ export default function ChatWidget() {
                 {messages.length === 0 && (
                   <p className="text-sm text-foreground/60">{GREETING}</p>
                 )}
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={
-                      message.role === "user"
-                        ? "ml-auto max-w-[85%] rounded-lg bg-brand px-3 py-2 text-sm text-white"
-                        : "mr-auto max-w-[85%] rounded-lg border border-border px-3 py-2 text-sm"
-                    }
-                  >
-                    {message.content}
-                  </div>
-                ))}
+                {messages.map((message, index) =>
+                  message.sources && message.sources.length > 0 ? (
+                    <div key={index} className="mr-auto max-w-[85%] space-y-2">
+                      <p className="text-sm">{message.content}</p>
+                      {message.sources.map((source, sourceIndex) => (
+                        <div
+                          key={sourceIndex}
+                          title={`score : ${source.score.toFixed(2)}`}
+                          className="rounded-lg border border-border bg-background px-3 py-2 text-xs"
+                        >
+                          <p className="font-medium text-foreground/80">{source.provenance}</p>
+                          <p className="mt-1 text-foreground/60">{source.contenu}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className={
+                        message.role === "user"
+                          ? "ml-auto max-w-[85%] rounded-lg bg-brand px-3 py-2 text-sm text-white"
+                          : "mr-auto max-w-[85%] rounded-lg border border-border px-3 py-2 text-sm"
+                      }
+                    >
+                      {message.content}
+                    </div>
+                  ),
+                )}
                 {phase === "error" && (
                   <p className="rounded-lg border border-dashed border-border px-3 py-2 text-sm text-foreground/70">
                     {errorMessage}

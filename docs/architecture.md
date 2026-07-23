@@ -10,7 +10,7 @@
                     │  Raspberry Pi  │  (allumé 24/7, seule machine exposée publiquement)
                     │  nginx + TLS   │
                     │  Next.js (app) │
-                    │  llama.cpp     │  (Gabrielle, chat)
+                    │  API Gabrielle │  (chat, interroge Raphaël en interne)
                     │  PLG           │  (Prometheus/Loki/Grafana — monitoring public)
                     └───────┬───────┘
                             │ LAN 192.168.1.0/24
@@ -23,7 +23,7 @@
                     └───────────────┘
 ```
 
-Le Pi héberge l'application Next.js (site, API routes), le backend du chatbot (llama.cpp) et la stack **PLG** (Prometheus/Loki/Grafana) qui monitore le Pi et alimente le tableau de bord public sur `/monitoring` — tout ça tourne 24/7, aucun réveil n'est nécessaire. Kali héberge en plus une stack **ELK** (Elasticsearch/Logstash/Kibana), mais à usage personnel (travaux, apprentissage) : privée, pas exposée sur le site, et pas en production au même sens que PLG. Kali **n'est pas réveillée automatiquement** (voir note ci-dessous) : elle est allumée manuellement par Vincent quand il en a besoin pour son propre usage.
+Le Pi héberge l'application Next.js (site, API routes), l'API de Gabrielle (chatbot) et la stack **PLG** (Prometheus/Loki/Grafana) qui monitore le Pi et alimente le tableau de bord public sur `/monitoring` — tout ça tourne 24/7, aucun réveil n'est nécessaire. Kali héberge en plus une stack **ELK** (Elasticsearch/Logstash/Kibana), mais à usage personnel (travaux, apprentissage) : privée, pas exposée sur le site, et pas en production au même sens que PLG. Kali **n'est pas réveillée automatiquement** (voir note ci-dessous) : elle est allumée manuellement par Vincent quand il en a besoin pour son propre usage.
 
 ## Kali : gérée manuellement, aucune automation
 
@@ -35,7 +35,13 @@ Suite à ce constat, l'automation de mise en veille par SSH (`lib/kaliSleepSched
 
 ## Gabrielle vs AlicIA
 
-AlicIA (le lab IA personnel, OpenClaw + Ollama, avec accès `exec`/fichiers) ne doit jamais être exposée publiquement. **Gabrielle** est le rôle d'accueil que joue AlicIA sur ce site : un petit modèle (0.5B) servi par llama.cpp sur le Pi, avec RAG géré côté serveur — même ton/persona, aucune capacité d'action réelle, aucun outil branché.
+AlicIA (le lab IA personnel, OpenClaw + Ollama, avec accès `exec`/fichiers) ne doit jamais être exposée publiquement. **Gabrielle** est le rôle d'accueil que joue AlicIA sur ce site — même ton/persona, aucune capacité d'action réelle, aucun outil branché.
+
+## Gabrielle + Raphaël
+
+Gabrielle a sa propre API (`GABRIELLE_API_URL`, défaut `http://127.0.0.1:8082`, cf. `lib/gabrielle.ts`), appelée uniquement côté serveur (`app/api/chat/route.ts`), jamais depuis le navigateur. Elle gère l'historique de conversation elle-même, par `session` (un UUID généré côté client, `sessionStorage`, transmis tel quel — borné à 20 tours et 1 h de TTL côté Gabrielle) : ce dépôt n'envoie que le dernier message, jamais tout le fil.
+
+Pour les réponses qui s'appuient sur la base de connaissance personnelle de Vincent, Gabrielle interroge **Raphaël** en interne — ce dépôt ne l'appelle jamais directement. La réponse distingue trois cas via le champ `statut` : `sources` (réponse appuyée sur des passages retrouvés, chacun avec une `provenance`, un `score` de similarité et son `contenu`), `conversation` (réponse simple, pas de source pertinente), `indisponible` (Raphaël injoignable — traité comme une panne normale, pas une erreur HTTP : la réponse reste 200). Le `verdict` renvoyé est de l'observabilité interne (loggé en `console.debug` côté serveur), jamais affiché.
 
 ## kb.hernandes.cloud — carte du vault LabIA (Quartz)
 

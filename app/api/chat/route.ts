@@ -1,28 +1,19 @@
 import { NextResponse } from "next/server";
 import { consumeToken, getClientIp } from "@/lib/rateLimit";
-import { askGabrielle, type ChatMessage } from "@/lib/llamaCpp";
-import { GABRIELLE_SYSTEM_PROMPT } from "@/lib/chatPrompt";
+import { askGabrielle } from "@/lib/gabrielle";
 
-const MAX_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 2000;
 
-function sanitizeMessages(input: unknown): ChatMessage[] | null {
-  if (!Array.isArray(input) || input.length === 0) return null;
+function sanitizeInput(input: unknown): { message: string; session: string } | null {
+  if (typeof input !== "object" || input === null) return null;
+  const { message, session } = input as Record<string, unknown>;
 
-  const messages = input.slice(-MAX_MESSAGES);
-  for (const m of messages) {
-    if (
-      typeof m !== "object" ||
-      m === null ||
-      (m.role !== "user" && m.role !== "assistant") ||
-      typeof m.content !== "string" ||
-      m.content.length === 0 ||
-      m.content.length > MAX_MESSAGE_LENGTH
-    ) {
-      return null;
-    }
+  if (typeof message !== "string" || message.length === 0 || message.length > MAX_MESSAGE_LENGTH) {
+    return null;
   }
-  return messages as ChatMessage[];
+  if (typeof session !== "string" || session.length === 0) return null;
+
+  return { message, session };
 }
 
 export async function POST(request: Request) {
@@ -35,14 +26,20 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => null);
-  const messages = sanitizeMessages(body?.messages);
-  if (!messages) {
+  const input = sanitizeInput(body);
+  if (!input) {
     return NextResponse.json({ error: "Message invalide." }, { status: 400 });
   }
 
   try {
-    const reply = await askGabrielle(messages, GABRIELLE_SYSTEM_PROMPT);
-    return NextResponse.json({ status: "ok", reply });
+    const answer = await askGabrielle(input.message, input.session);
+    // verdict est de l'observabilite, jamais renvoye au navigateur.
+    console.debug(`[gabrielle] statut=${answer.statut} verdict=${answer.verdict}`);
+    return NextResponse.json({
+      reponse: answer.reponse,
+      statut: answer.statut,
+      sources: answer.sources,
+    });
   } catch (error) {
     console.error("Erreur Gabrielle:", error);
     return NextResponse.json(
