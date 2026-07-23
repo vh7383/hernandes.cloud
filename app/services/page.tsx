@@ -3,7 +3,7 @@ import { services } from "@/content/services";
 import ServiceCard from "@/components/ServiceCard";
 
 export const metadata: Metadata = {
-  title: "Services — hernandes.cloud",
+  title: "Services - hernandes.cloud",
 };
 
 export default function ServicesPage() {

@@ -1,5 +1,5 @@
 # Déployé sur le Pi dans /opt/hernandes-cloud/ (à créer au premier déploiement).
-# `.env` (non commité) fournit les secrets/URLs runtime — voir .env.example.
+# `.env` (non commité) fournit les secrets/URLs runtime - voir .env.example.
 services:
   web:
     image: ghcr.io/vh7383/hernandes.cloud:latest
@@ -11,3 +11,10 @@ services:
       - "127.0.0.1:3001:3000"
     env_file:
       - .env
+    # Gabrielle tourne sur l'hôte (Pi), pas dans ce conteneur : 127.0.0.1 y
+    # désignerait le conteneur lui-même. `host-gateway` résout ce nom vers
+    # l'hôte quel que soit le sous-réseau Docker attribué (contrairement à une
+    # IP de gateway codée en dur, qui peut changer). GABRIELLE_API_URL doit
+    # utiliser ce nom dans le `.env` du Pi (cf. .env.example).
+    extra_hosts:
+      - "gabrielle-host:host-gateway"

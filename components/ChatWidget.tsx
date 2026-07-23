@@ -20,7 +20,7 @@ interface ChatMessage {
 type Phase = "idle" | "sending" | "error";
 
 const GREETING =
-  "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir — pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
+  "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir - pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
 
 // Ephemere par onglet (sessionStorage, pas localStorage) : coherent avec un
 // chat d'accueil sans compte, pas besoin de survivre entre deux visites.
@@ -37,7 +37,7 @@ function getOrCreateSession(): string {
 }
 
 // Durée d'affichage de l'état "parle" après une réponse reçue, avant de
-// revenir à "idle" — purement cosmétique (cf. components/PersonaHUD.tsx).
+// revenir à "idle" - purement cosmétique (cf. components/PersonaHUD.tsx).
 const PARLE_DURATION_MS = 1500;
 
 const PERSONA_NAMES: Record<PersonaKey, string> = {
@@ -47,18 +47,18 @@ const PERSONA_NAMES: Record<PersonaKey, string> = {
 };
 
 // Seule Gabrielle a un vrai backend. Choisir Raphaël ou Mickaël ici est
-// volontairement "pas effectif" — cf. docs/decisions.md : chacun décline
+// volontairement "pas effectif" - cf. docs/decisions.md : chacun décline
 // dans son propre style, sans jamais appeler l'API ni prétendre discuter
 // pour de vrai.
 const PERSONA_REDIRECTS: Partial<Record<PersonaKey, string>> = {
   raphael:
-    "Je ne trouve aucune trace de vous dans ce que je garde — sans mémoire commune, je n'ai pas grand-chose à vous dire. Gabrielle, elle, est là pour ça.",
+    "Je ne trouve aucune trace de vous dans ce que je garde - sans mémoire commune, je n'ai pas grand-chose à vous dire. Gabrielle, elle, est là pour ça.",
   mickael:
-    "Je ne vous identifie pas, et je ne discute pas avec un inconnu. Ce n'est pas mon rôle ici — allez voir Gabrielle, c'est la sienne.",
+    "Je ne vous identifie pas, et je ne discute pas avec un inconnu. Ce n'est pas mon rôle ici - allez voir Gabrielle, c'est la sienne.",
 };
 
 export default function ChatWidget() {
-  // Se déploie directement à l'arrivée sur le site — cf. docs/decisions.md.
+  // Se déploie directement à l'arrivée sur le site - cf. docs/decisions.md.
   const [open, setOpen] = useState(true);
   const [activePersona, setActivePersona] = useState<PersonaKey>("gabrielle");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -70,7 +70,7 @@ export default function ChatWidget() {
   const parleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // L'état animé (pense/parle/alerte) ne reflète une vraie activité que pour
-  // Gabrielle — Raphaël et Mickaël n'ont rien à traiter, donc restent idle.
+  // Gabrielle - Raphaël et Mickaël n'ont rien à traiter, donc restent idle.
   const etat: PersonaEtat =
     activePersona !== "gabrielle"
       ? "idle"

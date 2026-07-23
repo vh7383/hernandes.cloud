@@ -23,7 +23,7 @@ interface Persona {
 }
 
 // Descriptions volontairement centrées sur la personnalité/le rôle perçu,
-// pas sur la mécanique interne précise — cf. docs/decisions.md.
+// pas sur la mécanique interne précise - cf. docs/decisions.md.
 const PERSONAE: Persona[] = [
   {
     key: "gabrielle",
@@ -31,7 +31,7 @@ const PERSONAE: Persona[] = [
     tagline: "Annonce · Accueil",
     bubble: "« Entrez, je vous accueille. »",
     description:
-      "Le visage que vous croisez en premier sur ce site. Son rôle : accueillir, orienter, donner un premier niveau de réponse — sans jamais prétendre en savoir plus qu'elle n'en sait. Volontairement modeste, pensée pour la franchise plutôt que pour l'illusion de compétence.",
+      "Le visage que vous croisez en premier sur ce site. Son rôle : accueillir, orienter, donner un premier niveau de réponse - sans jamais prétendre en savoir plus qu'elle n'en sait. Volontairement modeste, pensée pour la franchise plutôt que pour l'illusion de compétence.",
   },
   {
     key: "raphael",
@@ -39,7 +39,7 @@ const PERSONAE: Persona[] = [
     tagline: "Connaissance",
     bubble: "« Je me souviens de tout. Enfin, presque. »",
     description:
-      "La mémoire du foyer. Il retient ce qui compte, relie les fils entre les échanges, donne de la continuité là où chaque conversation pourrait autrement repartir de zéro. Discret par nature — on le croise rarement en façade.",
+      "La mémoire du foyer. Il retient ce qui compte, relie les fils entre les échanges, donne de la continuité là où chaque conversation pourrait autrement repartir de zéro. Discret par nature - on le croise rarement en façade.",
   },
   {
     key: "mickael",
@@ -69,7 +69,7 @@ export default function PersonaGrid() {
     setOpenKey(key);
   }
 
-  // Navigation circulaire dans la modale (flèches) — remonte le HUD
+  // Navigation circulaire dans la modale (flèches) - remonte le HUD
   // (key={active.key}) donc rejoue l'arrivée à chaque changement.
   function stepPersona(delta: number) {
     const currentIndex = PERSONAE.findIndex((p) => p.key === openKey);
@@ -160,7 +160,7 @@ export default function PersonaGrid() {
                   ✕
                 </button>
               </div>
-              {/* Décalée après l'arrivée du HUD (150ms) — spec Fable, cf. docs/decisions.md. */}
+              {/* Décalée après l'arrivée du HUD (150ms) - spec Fable, cf. docs/decisions.md. */}
               <p
                 className="mt-3 text-sm text-foreground/70"
                 style={{ animation: "persona-reveal 350ms ease-out 150ms both" }}
@@ -168,7 +168,7 @@ export default function PersonaGrid() {
                 {active.description}
               </p>
             </div>
-            {/* Silhouette en pied en pleine largeur — trop petite en avatar,
+            {/* Silhouette en pied en pleine largeur - trop petite en avatar,
                 cf. docs/decisions.md. */}
             <Image
               src={PERSONA_SILHOUETTE_SRC[active.key]}

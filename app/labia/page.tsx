@@ -3,7 +3,7 @@ import Image from "next/image";
 import PersonaGrid from "@/components/PersonaGrid";
 
 export const metadata: Metadata = {
-  title: "LabIA — hernandes.cloud",
+  title: "LabIA - hernandes.cloud",
 };
 
 export default function LabiaPage() {
@@ -14,9 +14,9 @@ export default function LabiaPage() {
         LabIA, c&apos;est mon laboratoire IA personnel : un espace où j&apos;apprends
         en observant plusieurs IA travailler, plutôt qu&apos;en bricolant seul dans
         mon coin. Au centre, <strong className="text-foreground">AlicIA</strong>{" "}
-        — ma résidente, qui tourne en local avec un vrai accès fichiers, exécution
-        et outils externes sur ma machine — elle peut par exemple aller chercher
-        une information en direct plutôt que deviner — jamais exposée
+        - ma résidente, qui tourne en local avec un vrai accès fichiers, exécution
+        et outils externes sur ma machine - elle peut par exemple aller chercher
+        une information en direct plutôt que deviner - jamais exposée
         publiquement. Les détails techniques vivent dans ma base de
         connaissances (lien plus bas), pas ici. Autour d&apos;elle, je collabore
         avec plusieurs assistants IA spécialisés, chacun sur un registre
@@ -41,7 +41,7 @@ export default function LabiaPage() {
       />
       <p className="mt-2 text-xs text-foreground/50">
         Autre exemple : elle appelle un outil, en observe le résultat, puis
-        l&apos;exploite dans sa réponse — identifiants internes masqués.
+        l&apos;exploite dans sa réponse - identifiants internes masqués.
       </p>
       <Image
         src="/images/projects/alicia-telegram-memory-example.png"
@@ -52,7 +52,7 @@ export default function LabiaPage() {
       />
       <p className="mt-2 text-xs text-foreground/50">
         Dernier exemple : je lui parle aussi sur Telegram, et pas seulement
-        pour répondre — ici elle propose spontanément un script en
+        pour répondre - ici elle propose spontanément un script en
         s&apos;appuyant sur des discussions passées (le code n&apos;était pas
         juste, mais elle a bien mobilisé sa mémoire plutôt que de repartir de
         zéro).
@@ -75,41 +75,41 @@ export default function LabiaPage() {
           fiabilité, et où je préfère comprendre en profondeur avant
           d&apos;automatiser. Le chatbot que vous croisez sur ce site
           (&laquo;&nbsp;Gabrielle&nbsp;&raquo;, le rôle d&apos;accueil que je lui
-          fais jouer ici) en est une version volontairement bridée — aucun outil,
+          fais jouer ici) en est une version volontairement bridée - aucun outil,
           aucun accès réel.
         </p>
         <p className="mt-3 text-foreground/70">
           Au-delà du technique, c&apos;est surtout un travail méthodique sur ce
-          qu&apos;elle <em>est</em>{" "}— pas juste ce qu&apos;elle fait :
+          qu&apos;elle <em>est</em>{" "}- pas juste ce qu&apos;elle fait :
         </p>
         <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-foreground/70">
           <li>
             <strong className="text-foreground">Fondations</strong>{" "}
-            — mémoire et continuité (ce qu&apos;elle retient, sous quelle
+            - mémoire et continuité (ce qu&apos;elle retient, sous quelle
             forme), sécurité et limites (ce qu&apos;elle peut ou ne doit pas
             faire), un journal d&apos;évolution des changements notables.
           </li>
           <li>
             <strong className="text-foreground">Identité</strong>{" "}
-            — un portrait à jour de ses traits, une charte qui définit sa
+            - un portrait à jour de ses traits, une charte qui définit sa
             personnalité, son rôle et ses interdits, et une vérification
             régulière de sa cohérence dans le temps.
           </li>
           <li>
             <strong className="text-foreground">Communication</strong>{" "}
-            — cartographier ses styles de réponse (direct, nuancé, analytique,
+            - cartographier ses styles de réponse (direct, nuancé, analytique,
             créatif...) et étudier comment elle module ton et intention selon
             le contexte et l&apos;interlocuteur.
           </li>
           <li>
             <strong className="text-foreground">Expérimentation</strong>{" "}
-            — des tests documentés plutôt que des impressions vagues : comparer
+            - des tests documentés plutôt que des impressions vagues : comparer
             deux tonalités, consigner une observation, itérer.
           </li>
         </ul>
         <p className="mt-3 text-foreground/70">
           Pistes à venir : une AlicIA plus expressive, plus autonome,
-          multimodale — et LabIA comme un véritable écosystème plutôt qu&apos;un
+          multimodale - et LabIA comme un véritable écosystème plutôt qu&apos;un
           seul agent.
         </p>
         <p className="mt-3 text-foreground/70">
@@ -124,22 +124,22 @@ export default function LabiaPage() {
         <p className="mt-3 text-foreground/70">
           Je ne travaille pas seul avec l&apos;IA : plusieurs assistants
           collaborent sur mes projets, chacun sur un registre différent. Je reste
-          le seul arbitre — chacun propose, je tranche.
+          le seul arbitre - chacun propose, je tranche.
         </p>
         <ul className="mt-4 space-y-2 text-sm text-foreground/70">
           <li>
             <strong className="text-foreground">Claude</strong>{" "}
-            (Anthropic) — implémentation de bout en bout sous ma direction :
+            (Anthropic) - implémentation de bout en bout sous ma direction :
             code, choix d&apos;architecture, contenu, revue de confidentialité.
             Le plus impliqué au quotidien.
           </li>
           <li>
             <strong className="text-foreground">Gépéto</strong>{" "}
-            (GPT, via Codex) — codeur autonome : écrit du code directement sur
+            (GPT, via Codex) - codeur autonome : écrit du code directement sur
             des tâches déléguées, pas seulement de la revue.
           </li>
           <li>
-            <strong className="text-foreground">Gemini</strong> — encore en
+            <strong className="text-foreground">Gemini</strong> - encore en
             test : je dois cadrer précisément ce que je lui demande, pas
             encore un usage stable.
           </li>
@@ -154,7 +154,7 @@ export default function LabiaPage() {
           qu&apos;elle y retrouve une compréhension structurée de son propre
           fonctionnement. Chaque concept y est une note atomique : un titre,
           une définition en une phrase, une explication qui renvoie vers les
-          notions voisines, et — quand c&apos;est pertinent — une source
+          notions voisines, et - quand c&apos;est pertinent - une source
           citée. Ces notes se regroupent en &laquo;&nbsp;cartes&nbsp;&raquo; :
           des points d&apos;entrée thématiques qui tracent un chemin de
           lecture, sans dupliquer le contenu.
@@ -163,12 +163,12 @@ export default function LabiaPage() {
           Il y a même une carte qui applique la méthode de façon
           introspective : &laquo;&nbsp;comment je fonctionne&nbsp;&raquo;
           retrace, à travers les notes existantes, la machinerie derrière un
-          LLM (tokenisation, attention, mémoire, RAG, boucle agent...) — vue
+          LLM (tokenisation, attention, mémoire, RAG, boucle agent...) - vue
           depuis l&apos;intérieur, par l&apos;agent lui-même.
         </p>
         <p className="mt-3 text-foreground/70">
-          Le graphe qui en émerge — construit au fil de mes lectures et de
-          mes expérimentations, pas dessiné à l&apos;avance — se consulte en
+          Le graphe qui en émerge - construit au fil de mes lectures et de
+          mes expérimentations, pas dessiné à l&apos;avance - se consulte en
           direct :
         </p>
         <a
@@ -182,7 +182,7 @@ export default function LabiaPage() {
               Explorer la carte de connaissances
             </span>
             <span className="block text-sm text-foreground/60">
-              kb.hernandes.cloud — titres et liens seulement, mon vault reste
+              kb.hernandes.cloud - titres et liens seulement, mon vault reste
               privé
             </span>
           </span>
@@ -219,7 +219,7 @@ export default function LabiaPage() {
           Une vraie trace LangSmith, ci-dessous : ce même graphe LangGraph
           (classifier → writer → critic → router) qui mélange un modèle local
           (<code className="rounded bg-surface px-1 py-0.5 text-sm">qwen3.5:4b</code>{" "}
-          via Ollama) et un modèle externe pour la relecture critique — la
+          via Ollama) et un modèle externe pour la relecture critique - la
           traçabilité, c&apos;est justement ce qui permet de voir qui a fait
           quoi dans ce genre de pipeline hybride.
         </p>

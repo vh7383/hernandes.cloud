@@ -1,4 +1,4 @@
-// Parcours professionnel, à plat — même logique que content/projects.ts et
+// Parcours professionnel, à plat - même logique que content/projects.ts et
 // content/services.ts (tableau TS simple, pas de CMS).
 
 export interface ExperienceEntry {
@@ -11,14 +11,14 @@ export interface ExperienceEntry {
 
 export const experience: ExperienceEntry[] = [
   {
-    period: "Juin 2025 — Janvier 2026",
+    period: "Juin 2025 - Janvier 2026",
     title: "Administrateur Systèmes & Réseaux · Référent technique projets",
     company: "Qualitanie",
     location: "Saverdun / Toulouse",
     bullets: [
       "Conception d'un moteur de calcul d'itinéraires basé sur OpenTripPlanner : génération d'un graphe de routage GTFS optimisé à l'échelle régionale, dimensionné pour tenir sur un serveur client contraint (32 Go de RAM)",
       "Mise en production du POC sur l'infrastructure du client, validé et exploité par celui-ci",
-      "Migration complète du SI d'un client, de macOS vers Debian / Btrfs (~20 utilisateurs) : proposée, validée par le client, menée de bout en bout — intégration système, refonte réseau, split-DNS multi-horizons",
+      "Migration complète du SI d'un client, de macOS vers Debian / Btrfs (~20 utilisateurs) : proposée, validée par le client, menée de bout en bout - intégration système, refonte réseau, split-DNS multi-horizons",
       "Conception et intégration de solutions clients : serveurs, routage, déploiements spécifiques",
       "Administration Debian / Docker / WireGuard ; automatisation par scripts",
       "Suivi opérationnel de plusieurs chantiers clients en parallèle : découpage, avancement, communication interne et direction",
@@ -27,13 +27,13 @@ export const experience: ExperienceEntry[] = [
     ],
   },
   {
-    period: "2022 — 2023",
+    period: "2022 - 2023",
     title: "Ingénieur en conception & spécification (alternance)",
-    company: "Thales AVS — SciLab",
+    company: "Thales AVS - SciLab",
     location: "Toulouse",
     bullets: [
       "Développement Python / Angular au sein du SciLab, structure agile opérant comme une start-up interne au cœur d'un groupe industriel",
-      "MCO / MCS d'un Business Managed Network : réseau privé du laboratoire, autonome sous supervision de la DSI groupe — exploitation, sécurité, intégration de nouvelles solutions",
+      "MCO / MCS d'un Business Managed Network : réseau privé du laboratoire, autonome sous supervision de la DSI groupe - exploitation, sécurité, intégration de nouvelles solutions",
       "Rôle transverse au service des équipes du groupe (développement, R&D, communication, cybersécurité) : valorisation de leurs projets avec les moyens du laboratoire",
       "Gestion autonome de projets internes : documentation, transfert de connaissances",
     ],
@@ -58,7 +58,7 @@ export const experience: ExperienceEntry[] = [
     ],
   },
   {
-    period: "2019 — 2021",
+    period: "2019 - 2021",
     title: "Technicien réseau",
     company: "Econocom",
     location: "Toulouse",

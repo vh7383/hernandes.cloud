@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
 
   // Autorise next/image à optimiser les SVG (bloqué par défaut, risque XSS
-  // sur du SVG non maîtrisé) — les nôtres sont écrits par nous, dans public/,
+  // sur du SVG non maîtrisé) - les nôtres sont écrits par nous, dans public/,
   // pas des uploads utilisateur.
   images: {
     dangerouslyAllowSVG: true,
@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   // Marqueur pour lib/status.ts : distingue "on a vraiment atteint ce
   // service" de "on a rebondi sur notre propre app via le default_server
   // nginx" (cf. docs/decisions.md). Un simple header `x-powered-by: Next.js`
-  // ne suffit pas — plex.tv tourne lui-même sur Next.js (faux négatif testé
+  // ne suffit pas - plex.tv tourne lui-même sur Next.js (faux négatif testé
   // en réel), il faut un identifiant propre à CE déploiement précis.
   async headers() {
     return [

@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-push:
-    # Runner arm64 natif (le Pi cible est aarch64 — cf. docs/architecture.md).
+    # Runner arm64 natif (le Pi cible est aarch64 - cf. docs/architecture.md).
     # Avant : ubuntu-latest (x86_64) + QEMU pour le cross-build, mais QEMU
     # plantait sur les binaires natifs de Next.js (SWC) : "qemu: uncaught
     # target signal 4 (Illegal instruction)". Un runner nativement arm64

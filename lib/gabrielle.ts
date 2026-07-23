@@ -21,7 +21,7 @@ export interface GabrielleAnswer {
 }
 
 /**
- * Appelle POST /api/v1/ask. Toujours 200 sauf requete malformee (400) — un
+ * Appelle POST /api/v1/ask. Toujours 200 sauf requete malformee (400) - un
  * Raphael injoignable cote Gabrielle se traduit par statut: "indisponible"
  * dans une reponse 200, pas par une erreur HTTP.
  */

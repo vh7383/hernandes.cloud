@@ -2,7 +2,7 @@
 
 Porte d'entrée de mon SI personnel : portfolio, hub vers mes services auto-hébergés (Nextcloud, Vaultwarden, Plex, photos, vidéosurveillance), chatbot **Gabrielle**, et affichage public de mon monitoring (Grafana).
 
-Ce projet sert aussi de terrain d'apprentissage : Next.js/React, et la méthode de travail (documentation continue, décisions tracées) — voir [`docs/`](./docs).
+Ce projet sert aussi de terrain d'apprentissage : Next.js/React, et la méthode de travail (documentation continue, décisions tracées) - voir [`docs/`](./docs).
 
 ## Stack
 
@@ -12,7 +12,7 @@ Ce projet sert aussi de terrain d'apprentissage : Next.js/React, et la méthode 
 
 ## Particularité : Kali gérée manuellement
 
-Ma machine Kali (labo perso, ELK) ne reste **pas** allumée en permanence, contrairement au Pi qui héberge le site. Je l'allume et l'endors moi-même selon mes besoins — aucune automation de réveil ou de mise en veille dans ce dépôt (Wake-on-LAN abandonné pour cette machine, cf. `docs/decisions.md`). Le monitoring public du site (Grafana) et le chatbot (l'API de Gabrielle) tournent tous les deux directement sur le Pi, donc aucun des deux ne dépend de Kali. Détails dans [`docs/architecture.md`](./docs/architecture.md).
+Ma machine Kali (labo perso, ELK) ne reste **pas** allumée en permanence, contrairement au Pi qui héberge le site. Je l'allume et l'endors moi-même selon mes besoins - aucune automation de réveil ou de mise en veille dans ce dépôt (Wake-on-LAN abandonné pour cette machine, cf. `docs/decisions.md`). Le monitoring public du site (Grafana) et le chatbot (l'API de Gabrielle) tournent tous les deux directement sur le Pi, donc aucun des deux ne dépend de Kali. Détails dans [`docs/architecture.md`](./docs/architecture.md).
 
 ## Développement local
 
@@ -25,12 +25,12 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 
 ## Déploiement
 
-Voir le workflow `.github/workflows/deploy.yml` — build Docker multi-arch (arm64), push vers `ghcr.io/vh7383/hernandes.cloud`, puis déploiement sur le Pi via SSH (`docker compose pull && docker compose up -d`).
+Voir le workflow `.github/workflows/deploy.yml` - build Docker multi-arch (arm64), push vers `ghcr.io/vh7383/hernandes.cloud`, puis déploiement sur le Pi via SSH (`docker compose pull && docker compose up -d`).
 
 ## Documentation
 
-- [`docs/architecture.md`](./docs/architecture.md) — schéma des machines impliquées (Pi/Kali) et des flux (chatbot, monitoring).
-- [`docs/decisions.md`](./docs/decisions.md) — journal des décisions structurantes prises pendant la construction.
+- [`docs/architecture.md`](./docs/architecture.md) - schéma des machines impliquées (Pi/Kali) et des flux (chatbot, monitoring).
+- [`docs/decisions.md`](./docs/decisions.md) - journal des décisions structurantes prises pendant la construction.
 
 ## État de production
 
@@ -39,4 +39,4 @@ Déployé et en ligne sur `hernandes.cloud` (Pi, reverse proxy nginx → contene
 ## Reste à faire
 
 - Nettoyage de `/var/www/html` sur le Pi, une fois la confiance établie dans le nouveau déploiement.
-- Alias DSM restant : `nas.hernandes.cloud` (DSM lui-même) toujours marqué `comingSoon` dans `content/services.ts` — pas encore configuré côté DSM, contrairement aux 7 autres services NAS (reverse proxy + certificat partagé avec le Pi, plus de port dans l'URL depuis le 2026-07-21, cf. `docs/decisions.md`).
+- Alias DSM restant : `nas.hernandes.cloud` (DSM lui-même) toujours marqué `comingSoon` dans `content/services.ts` - pas encore configuré côté DSM, contrairement aux 7 autres services NAS (reverse proxy + certificat partagé avec le Pi, plus de port dans l'URL depuis le 2026-07-21, cf. `docs/decisions.md`).

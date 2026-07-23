@@ -4,7 +4,7 @@ import StatusBadge from "@/components/StatusBadge";
 import MonitoringEmbed from "@/components/MonitoringEmbed";
 
 export const metadata: Metadata = {
-  title: "Monitoring — hernandes.cloud",
+  title: "Monitoring - hernandes.cloud",
 };
 
 // Revalidation courte plutôt que 100% statique ou 100% dynamique : les

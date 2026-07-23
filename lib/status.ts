@@ -19,9 +19,9 @@ async function fetchWithTimeout(url: string, method: "HEAD" | "GET", timeoutMs =
 /**
  * Un sous-domaine hernandes.cloud pas encore configuré côté cible réelle
  * (alias DSM manquant, DNS absent, etc.) peut atterrir sur notre propre site
- * via le `default_server` nginx (cf. docs/decisions.md) au lieu d'échouer —
+ * via le `default_server` nginx (cf. docs/decisions.md) au lieu d'échouer -
  * faux "en ligne" sinon. On détecte ça via un header propre à CE déploiement
- * (`X-Site-Id`, cf. next.config.ts) — pas `x-powered-by: Next.js` seul, qui
+ * (`X-Site-Id`, cf. next.config.ts) - pas `x-powered-by: Next.js` seul, qui
  * donne un faux négatif sur des services externes qui tournent eux-mêmes sur
  * Next.js (constaté en réel : plex.tv envoie ce header aussi).
  */
@@ -56,7 +56,7 @@ export async function getAllServiceStatuses(): Promise<ServiceStatus[]> {
 
 /**
  * Le tableau de bord public est un dashboard Grafana hébergé sur le Pi
- * (toujours allumé) — plus l'ancien plan Kali/Elastic (jamais concrétisé,
+ * (toujours allumé) - plus l'ancien plan Kali/Elastic (jamais concrétisé,
  * cf. docs/decisions.md). On vérifie juste que le lien public répond.
  */
 export async function getMonitoringStatus(): Promise<"up" | "down"> {

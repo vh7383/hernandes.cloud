@@ -48,7 +48,7 @@ interface PersonaHUDProps {
   showLabel?: boolean;
   size?: number;
   // Joue une animation d'arrivée ponctuelle au montage (vol depuis un bord
-  // d'écran → burst → sigil → pupille) — spec chorégraphiée par Fable,
+  // d'écran → burst → sigil → pupille) - spec chorégraphiée par Fable,
   // cf. docs/decisions.md. Ne rejoue pas tant que le composant ne remonte
   // pas : le parent doit lui donner une `key` stable par identité (ex.
   // key={persona}) pour la redéclencher au changement de persona.
@@ -61,7 +61,7 @@ const VOL_SRC: Record<PersonaKey, string> = {
   mickael: "/images/personae/assets/silhouette-mickael-vol.svg",
 };
 
-// Portraits statiques (assets fournis, ratio natif 4:3) — cf. docs/decisions.md
+// Portraits statiques (assets fournis, ratio natif 4:3) - cf. docs/decisions.md
 // pour l'usage de chaque variante (buste, silhouette en pied, sigil).
 export const PERSONA_BUSTE_SRC: Record<PersonaKey, string> = {
   gabrielle: "/images/personae/assets/silhouette-gabrielle-buste.svg",
@@ -96,7 +96,7 @@ export default function PersonaHUD({
   const pupilRef = useRef<HTMLDivElement>(null);
   const [pupil, setPupil] = useState({ x: 0, y: 0 });
   // Le vol est rendu via portail dans <body> (cf. JSX plus bas) pour
-  // échapper à l'overflow-hidden de la modale personae — sinon la
+  // échapper à l'overflow-hidden de la modale personae - sinon la
   // silhouette est visuellement coupée dès qu'elle sort de la carte,
   // au lieu de vraiment partir du bord de l'écran. `flightBox` porte sa
   // position cible (calquée sur le HUD), mesurée avant peinture.
@@ -115,14 +115,14 @@ export default function PersonaHUD({
       width,
       height,
     });
-    // Ne mesure qu'au montage — cf. commentaire du prop `arrive`.
+    // Ne mesure qu'au montage - cf. commentaire du prop `arrive`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!arrive || !flightBox) return;
 
-    // Phase 0 — vol : départ d'un bord d'écran aléatoire, trajectoire
+    // Phase 0 - vol : départ d'un bord d'écran aléatoire, trajectoire
     // courbe (wobble perpendiculaire), flip selon la direction, fusion
     // dans le sigil. Le burst/sigil/pupille sont décalés d'autant pour
     // démarrer pile à la fusion.
@@ -186,7 +186,7 @@ export default function PersonaHUD({
       ],
       { duration: 800, easing: "ease-out", delay, fill: "backwards" },
     );
-    // Ne joue qu'une fois flightBox mesuré — cf. useLayoutEffect ci-dessus.
+    // Ne joue qu'une fois flightBox mesuré - cf. useLayoutEffect ci-dessus.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flightBox]);
 

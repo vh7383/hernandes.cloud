@@ -3,7 +3,7 @@ import Image from "next/image";
 import { experience } from "@/content/experience";
 
 export const metadata: Metadata = {
-  title: "À propos — hernandes.cloud",
+  title: "À propos - hernandes.cloud",
 };
 
 const skillGroups: { label: string; skills: string[] }[] = [
@@ -38,7 +38,7 @@ export default function AboutPage() {
         </div>
       </div>
       <p className="mt-4 text-foreground/70">
-        Je m&apos;appelle Vincent Hernandes — spécialisé en architecture et
+        Je m&apos;appelle Vincent Hernandes - spécialisé en architecture et
         ingénierie des systèmes et logiciels. Basé à Toulouse, ouvert à la
         mobilité internationale.
         N&apos;hésitez pas à me contacter pour échanger ou collaborer !
@@ -54,7 +54,7 @@ export default function AboutPage() {
           culture systèmes/réseaux et ingénierie logicielle, forgée en
           environnement industriel critique (Thales) et en PME multi-clients.
           Pratique quotidienne de l&apos;automatisation, de la documentation
-          et du self-hosting — dont un lab personnel d&apos;agents IA locaux,
+          et du self-hosting - dont un lab personnel d&apos;agents IA locaux,
           ce site en étant la démonstration directe.
         </p>
         <p className="mt-3 text-foreground/70">
@@ -77,7 +77,7 @@ export default function AboutPage() {
               <h3 className="mt-1 font-semibold">{entry.title}</h3>
               <p className="text-sm text-foreground/70">
                 {entry.company}
-                {entry.location ? ` — ${entry.location}` : ""}
+                {entry.location ? ` - ${entry.location}` : ""}
               </p>
               <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-foreground/60">
                 {entry.bullets.map((bullet) => (
@@ -94,7 +94,7 @@ export default function AboutPage() {
         <ul className="mt-3 space-y-2">
           {formation.map((f) => (
             <li key={f.label} className="text-sm text-foreground/70">
-              <strong className="text-foreground">{f.label}</strong> — {f.school} ({f.level})
+              <strong className="text-foreground">{f.label}</strong> - {f.school} ({f.level})
             </li>
           ))}
         </ul>
@@ -148,7 +148,7 @@ export default function AboutPage() {
               >
                 Les Glénans ↗
               </a>{" "}
-              — moniteur bénévole à l&apos;école de voile depuis 2021, et
+              - moniteur bénévole à l&apos;école de voile depuis 2021, et
               membre du comité de secteur : j&apos;aide à faire vivre la base
               et la communauté au quotidien.
             </p>
@@ -170,7 +170,7 @@ export default function AboutPage() {
               >
                 Les Restos du Cœur ↗
               </a>{" "}
-              — chauffeur-logisticien bénévole depuis 2025 : je livre
+              - chauffeur-logisticien bénévole depuis 2025 : je livre
               essentiellement sur la zone départementale, parfois plus loin.
             </p>
           </div>

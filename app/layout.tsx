@@ -21,10 +21,10 @@ const SITE_DESCRIPTION =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Vincent Hernandes — hernandes.cloud",
+  title: "Vincent Hernandes - hernandes.cloud",
   description: SITE_DESCRIPTION,
   openGraph: {
-    title: "Vincent Hernandes — hernandes.cloud",
+    title: "Vincent Hernandes - hernandes.cloud",
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: "hernandes.cloud",
@@ -35,13 +35,13 @@ export const metadata: Metadata = {
         url: "/images/og-image.png",
         width: 1200,
         height: 627,
-        alt: "Vincent Hernandes — Architecture & ingénierie systèmes/logiciels",
+        alt: "Vincent Hernandes - Architecture & ingénierie systèmes/logiciels",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vincent Hernandes — hernandes.cloud",
+    title: "Vincent Hernandes - hernandes.cloud",
     description: SITE_DESCRIPTION,
     images: ["/images/og-image.png"],
   },

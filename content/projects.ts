@@ -1,5 +1,5 @@
 // Liste de projets à plat, en TypeScript : pas de CMS/MDX, juste un tableau
-// qu'on édite à la main. Volontairement simple pour l'instant — voir
+// qu'on édite à la main. Volontairement simple pour l'instant - voir
 // docs/decisions.md pour la raison de ce choix.
 
 export interface Project {
@@ -30,7 +30,7 @@ export const projects: Project[] = [
     slug: "labia",
     title: "LabIA",
     description:
-      "Mon laboratoire IA personnel : une résidente (AlicIA, OpenClaw + Ollama, mon projet principal — identité, communication, expérimentation) et plusieurs assistants IA avec qui je collabore au quotidien. Travail en cours sur l'orchestration multi-agents (LangGraph) et la traçabilité (LangSmith).",
+      "Mon laboratoire IA personnel : une résidente (AlicIA, OpenClaw + Ollama, mon projet principal - identité, communication, expérimentation) et plusieurs assistants IA avec qui je collabore au quotidien. Travail en cours sur l'orchestration multi-agents (LangGraph) et la traçabilité (LangSmith).",
     stack: ["Ollama", "OpenClaw", "LangGraph", "LangSmith", "Multi-agent"],
     links: {
       page: "/labia",
@@ -57,7 +57,7 @@ export const projects: Project[] = [
   },
   {
     slug: "wikilab",
-    title: "WikiLAB — plateforme documentaire interne",
+    title: "WikiLAB - plateforme documentaire interne",
     description:
       "Application web de gestion documentaire (pages, tutoriels, présentations) avec authentification par rôles (utilisateur, modérateur, administrateur) et modération de contenu. Réalisée en équipe chez Thales AVS dans le cadre de ma licence.",
     stack: ["Angular", "Node.js", "Express", "MongoDB", "JWT"],
@@ -65,7 +65,7 @@ export const projects: Project[] = [
   },
   {
     slug: "otp-routage-multimodal",
-    title: "OpenTripPlanner — routage multimodal (POC)",
+    title: "OpenTripPlanner - routage multimodal (POC)",
     description:
       "Preuve de concept de routage multimodal pour une entreprise de mobilité, basée sur OpenTripPlanner 2.4 : pipeline de données OSM/GTFS/DEM (GDAL), construction de graphe, déploiement en service systemd, documentation d'exploitation et de reprise. Mission professionnelle réalisée en solo.",
     stack: ["OpenTripPlanner", "GDAL", "GTFS", "OSM", "Java", "Systemd"],
