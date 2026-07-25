@@ -19,6 +19,19 @@ const SITE_URL = "https://hernandes.cloud";
 const SITE_DESCRIPTION =
   "Portfolio de Vincent Hernandes, spécialisé en architecture et ingénierie des systèmes et logiciels : projets, compétences techniques et système auto-hébergé (Docker, monitoring, IA locale). Découvrez mes réalisations et contactez-moi pour toute collaboration.";
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Vincent Hernandes",
+  url: SITE_URL,
+  image: `${SITE_URL}/images/vincent-avatar.jpg`,
+  jobTitle: "Architecture & Ingénierie des Systèmes et Logiciels",
+  address: { "@type": "PostalAddress", addressLocality: "Toulouse", addressCountry: "FR" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "Conservatoire National des Arts et Métiers (CNAM)" },
+  knowsAbout: ["Administration systèmes et réseaux", "DevOps", "Self-hosting", "Cybersécurité", "IA locale (RAG, agents, MCP)"],
+  sameAs: ["https://github.com/vh7383", "https://www.linkedin.com/in/vincent-hernandes"],
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Vincent Hernandes - hernandes.cloud",
@@ -58,6 +71,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />
