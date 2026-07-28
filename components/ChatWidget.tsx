@@ -58,8 +58,8 @@ const PERSONA_REDIRECTS: Partial<Record<PersonaKey, string>> = {
 };
 
 export default function ChatWidget() {
-  // Se déploie directement à l'arrivée sur le site - cf. docs/decisions.md.
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [activePersona, setActivePersona] = useState<PersonaKey>("gabrielle");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -141,20 +141,37 @@ export default function ChatWidget() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {open && (
-        <div className="mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg">
+        <div
+          className={
+            expanded
+              ? "mb-3 flex h-[48rem] max-h-[85vh] w-[40rem] max-w-[90vw] flex-col rounded-lg border border-border bg-surface shadow-lg"
+              : "mb-3 flex h-96 w-80 flex-col rounded-lg border border-border bg-surface shadow-lg"
+          }
+        >
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             {/* key={activePersona} : rejoue l'arrivée (vol + burst + sigil +
                 pupille) à chaque changement de persona, cf. PersonaHUD/decisions.md. */}
             <PersonaHUD key={activePersona} persona={activePersona} etat={etat} size={32} showLabel arrive />
             <Image src={PERSONA_SIGIL_SRC[activePersona]} alt="" width={32} height={32} />
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              aria-label="Fermer le chat"
-              className="text-foreground/60 hover:text-foreground"
-            >
-              ✕
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                aria-label={expanded ? "Réduire le chat" : "Agrandir le chat"}
+                title={expanded ? "Réduire" : "Agrandir"}
+                className="text-foreground/60 hover:text-foreground"
+              >
+                {expanded ? "⤡" : "⤢"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Fermer le chat"
+                className="text-foreground/60 hover:text-foreground"
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
           {/* Choix de persona volontairement décoratif : seule Gabrielle

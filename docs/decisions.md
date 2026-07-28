@@ -282,3 +282,9 @@ Contrat de réponse : `{reponse, statut, verdict, sources, ts}`, discriminant su
 Repéré après coup (signalé via Fable) : le site tourne dans un conteneur Docker sur le Pi, mais Gabrielle tourne sur l'hôte - le défaut `GABRIELLE_API_URL=http://127.0.0.1:8082` désigne alors le conteneur lui-même, pas l'hôte. `docker-compose.yml` ajoute `extra_hosts: ["gabrielle-host:host-gateway"]`, qui résout ce nom vers l'hôte quel que soit le sous-réseau Docker attribué (préféré à une IP de gateway codée en dur, ex. `172.19.0.1`, qui peut changer). `.env.example` documente `GABRIELLE_API_URL=http://gabrielle-host:8082` comme valeur à utiliser sur le Pi.
 
 Point d'attention pour le déploiement réel : `docker compose up -d` (recréation du conteneur) est nécessaire pour appliquer `extra_hosts` et relire `.env` - un simple restart ne recharge pas l'environnement.
+
+## 2026-07-28 - ChatWidget fermé par défaut, taille agrandissable
+
+Retour sur la décision du 2026-07-10 : Vincent juge finalement l'ouverture automatique de `ChatWidget` à l'arrivée trop intrusive. `open` réinitialisé à `false` (le message d'accueil de Gabrielle ne s'affiche donc qu'après ouverture manuelle).
+
+Ajout d'un bouton "agrandir" (⤢/⤡) dans l'en-tête, à côté de fermer : bascule la fenêtre entre sa taille normale (`h-96 w-80`, 384×320px) et une taille double (`h-[48rem] w-[40rem]`, 768×640px, plafonnée à `85vh`/`90vw` pour rester utilisable sur petit écran). État `expanded` local au composant, non persisté.
