@@ -16,9 +16,6 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# openssh-client : nécessaire à lib/kaliSleepScheduler.ts (ssh vers Kali).
-RUN apk add --no-cache openssh-client
-
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
