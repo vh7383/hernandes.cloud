@@ -1,8 +1,35 @@
-# hernandes.cloud
+<p align="center">
+  <img src="public/images/og-image.png" alt="Vincent Hernandes — hernandes.cloud" width="600">
+</p>
 
-Porte d'entrée de mon SI personnel : portfolio, hub vers mes services auto-hébergés (Nextcloud, Vaultwarden, Plex, photos, vidéosurveillance), chatbot **Gabrielle**, et affichage public de mon monitoring (Grafana).
+<h1 align="center">hernandes.cloud</h1>
 
-Ce projet sert aussi de terrain d'apprentissage : Next.js/React, et la méthode de travail (documentation continue, décisions tracées) - voir [`docs/`](./docs).
+<p align="center">
+  Portfolio personnel et porte d'entrée de mon SI auto-hébergé.
+  <br>
+  <a href="https://hernandes.cloud"><strong>hernandes.cloud →</strong></a>
+</p>
+
+<p align="center">
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white">
+  <img alt="Tailwind CSS v4" src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white">
+  <a href="https://github.com/vh7383/hernandes.cloud/actions/workflows/deploy.yml"><img alt="Build and deploy" src="https://github.com/vh7383/hernandes.cloud/actions/workflows/deploy.yml/badge.svg"></a>
+</p>
+
+Ce dépôt est le code du site que j'utilise pour me présenter et exposer mon infra perso : portfolio (projets, expériences, engagements associatifs), hub vers mes services auto-hébergés (Nextcloud, Vaultwarden, Plex, photos, vidéosurveillance...), un chatbot d'accueil maison, et un tableau de bord de monitoring public - le tout déployé sur mon propre Raspberry Pi.
+
+Ce projet me sert aussi de terrain d'apprentissage : Next.js/React, et une méthode de travail avec documentation continue et décisions tracées au fil de l'eau - voir [`docs/`](./docs).
+
+## Fonctionnalités
+
+- **Portfolio** ([`/`](https://hernandes.cloud), [`/about`](https://hernandes.cloud/about), [`/projects`](https://hernandes.cloud/projects)) - présentation, expériences, projets perso et professionnels (anonymisés quand nécessaire).
+- **Gabrielle**, le chatbot d'accueil ([`components/ChatWidget.tsx`](./components/ChatWidget.tsx)) - trois personae en façade (Gabrielle/Raphaël/Mickaël, cf. [`/labia`](https://hernandes.cloud/labia)), mais seule Gabrielle répond réellement : elle interroge en interne **Raphaël**, ma base de connaissance perso, pour des réponses sourcées quand c'est pertinent, sinon une conversation simple - jamais d'invention non appuyée.
+- **[`/monitoring`](https://hernandes.cloud/monitoring)** - dashboard Grafana public en direct sur l'état de mon infra (stack Prometheus/Loki/Grafana, tourne 24/7 sur le Pi).
+- **[`/services`](https://hernandes.cloud/services)** - hub vers mes services auto-hébergés (Nextcloud, Vaultwarden, Plex, et les applications DSM de mon NAS Synology).
+- **[`/infra`](https://hernandes.cloud/infra)** - vue d'ensemble de mon homelab (Pi/NAS/Kali/Desktop), sans détail exploitable publié (cf. [`docs/decisions.md`](./docs/decisions.md)).
+- **[`/labia`](https://hernandes.cloud/labia)** - mon laboratoire IA personnel, autour d'**AlicIA** (ma résidente, OpenClaw + Ollama, avec un vrai accès fichiers/outils/exécution - jamais exposée publiquement) et de plusieurs assistants IA qui collaborent avec moi au quotidien (Claude, GPT via Codex, Gemini). Travail de fond sur son identité et sa mémoire (fondations, portrait, cartographie de sa communication, expérimentations documentées), orchestration en cours avec LangGraph/LangSmith, base de connaissances consultable en direct sur [kb.hernandes.cloud](https://kb.hernandes.cloud).
 
 ## Stack
 
@@ -10,9 +37,27 @@ Ce projet sert aussi de terrain d'apprentissage : Next.js/React, et la méthode 
 - **Tailwind CSS v4** (config native CSS via `@theme`, pas de `tailwind.config.ts`)
 - Déploiement : Docker (image `linux/arm64`) sur un Raspberry Pi, via GitHub Actions + `ghcr.io`
 
-## Particularité : Kali gérée manuellement
+## Architecture
 
-Ma machine Kali (labo perso, ELK) ne reste **pas** allumée en permanence, contrairement au Pi qui héberge le site. Je l'allume et l'endors moi-même selon mes besoins - aucune automation de réveil ou de mise en veille dans ce dépôt (Wake-on-LAN abandonné pour cette machine, cf. `docs/decisions.md`). Le monitoring public du site (Grafana) et le chatbot (l'API de Gabrielle) tournent tous les deux directement sur le Pi, donc aucun des deux ne dépend de Kali. Détails dans [`docs/architecture.md`](./docs/architecture.md).
+```
+                         Internet
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │  Raspberry Pi  │  (allumé 24/7, seule machine exposée publiquement)
+                    │  nginx + TLS   │
+                    │  Next.js (app) │
+                    │  API Gabrielle │  (chat, interroge Raphaël en interne)
+                    │  PLG           │  (Prometheus/Loki/Grafana - monitoring public)
+                    └───────┬───────┘
+                            │ LAN
+                            ▼
+                    ┌───────────────┐
+                    │      Kali      │  (labo perso sécu, ELK privé, gérée manuellement)
+                    └───────────────┘
+```
+
+Détails complets - dont pourquoi Kali n'est jamais réveillée automatiquement, et comment Gabrielle s'articule avec Raphaël - dans [`docs/architecture.md`](./docs/architecture.md).
 
 ## Développement local
 
@@ -21,22 +66,23 @@ npm install
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000).
+Ouvrir [http://localhost:3000](http://localhost:3000). Variables d'environnement optionnelles : voir [`.env.example`](./.env.example) (tout a un défaut raisonnable en local).
 
 ## Déploiement
 
-Voir le workflow `.github/workflows/deploy.yml` - build Docker multi-arch (arm64), push vers `ghcr.io/vh7383/hernandes.cloud`, puis déploiement sur le Pi via SSH (`docker compose pull && docker compose up -d`).
+Voir le workflow [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) - build Docker multi-arch (arm64 natif, pas d'émulation QEMU), push vers `ghcr.io/vh7383/hernandes.cloud`, puis déploiement sur le Pi via SSH (`docker compose pull && docker compose up -d`).
 
 ## Documentation
 
 - [`docs/architecture.md`](./docs/architecture.md) - schéma des machines impliquées (Pi/Kali) et des flux (chatbot, monitoring).
-- [`docs/decisions.md`](./docs/decisions.md) - journal des décisions structurantes prises pendant la construction.
+- [`docs/decisions.md`](./docs/decisions.md) - journal des décisions structurantes prises pendant la construction, avec leur contexte.
+- [`docs/postmortems/`](./docs/postmortems) - incidents réels documentés en détail (ex. déploiement CI/CD de `kb.hernandes.cloud`).
 
 ## État de production
 
-Déployé et en ligne sur `hernandes.cloud` (Pi, reverse proxy nginx → conteneur `127.0.0.1:3001`) depuis le 2026-07-06. Pipeline CI/CD GitHub Actions fonctionnel (build arm64 → `ghcr.io` → déploiement SSH). `/var/www/html` (ancien site statique) conservé intact en fallback, non nettoyé pour l'instant.
+Déployé et en ligne sur [hernandes.cloud](https://hernandes.cloud) (Pi, reverse proxy nginx → conteneur) depuis le 2026-07-06. Pipeline CI/CD GitHub Actions fonctionnel (build arm64 → `ghcr.io` → déploiement SSH).
 
 ## Reste à faire
 
-- Nettoyage de `/var/www/html` sur le Pi, une fois la confiance établie dans le nouveau déploiement.
-- Alias DSM restant : `nas.hernandes.cloud` (DSM lui-même) toujours marqué `comingSoon` dans `content/services.ts` - pas encore configuré côté DSM, contrairement aux 7 autres services NAS (reverse proxy + certificat partagé avec le Pi, plus de port dans l'URL depuis le 2026-07-21, cf. `docs/decisions.md`).
+- Nettoyage de `/var/www/html` sur le Pi (ancien site statique, conservé en fallback), une fois la confiance établie dans le nouveau déploiement.
+- Alias DSM restant : `nas.hernandes.cloud` (DSM lui-même) toujours marqué `comingSoon` dans `content/services.ts` - pas encore configuré côté DSM, contrairement aux 7 autres services NAS (reverse proxy + certificat partagé avec le Pi).
