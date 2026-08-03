@@ -83,7 +83,6 @@ Voir le workflow [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml
 
 - [`docs/architecture.md`](./docs/architecture.md) - schéma des machines impliquées et des flux (chatbot, monitoring).
 - [`docs/decisions.md`](./docs/decisions.md) - journal des décisions structurantes prises pendant la construction, avec leur contexte.
-- [`docs/postmortems/`](./docs/postmortems) - incidents réels documentés en détail (ex. déploiement CI/CD de `kb.hernandes.cloud`).
 
 ## État de production
 

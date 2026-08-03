@@ -247,11 +247,11 @@ Vincent voulait voir les 4 états sans devoir passer par une vraie conversation 
 
 ## 2026-07-12 - kb.hernandes.cloud (Quartz) : incident de déploiement CI/CD
 
-Le premier déploiement du job CI de `kb.hernandes.cloud` a échoué six fois de suite sur trois causes indépendantes (dossier de build généré non versionné, réutilisation d'un accès SSH restreint à un usage différent de celui prévu, documentation TLS obsolète) avant résolution complète - voir le postmortem détaillé : [`docs/postmortems/2026-07-12-kb-deploy-cicd.md`](postmortems/2026-07-12-kb-deploy-cicd.md). Aucun impact sur `hernandes.cloud`, résolu sans perte de données.
+Le premier déploiement du job CI de `kb.hernandes.cloud` a échoué six fois de suite sur trois causes indépendantes (dossier de build généré non versionné, réutilisation d'un accès SSH restreint à un usage différent de celui prévu, documentation TLS obsolète) avant résolution complète. Aucun impact sur `hernandes.cloud`, résolu sans perte de données.
 
 ## 2026-07-19 - kb.hernandes.cloud migré vers un dépôt dédié
 
-L'intégration Quartz embarquée (`kb/`, `scripts/export-kb-skeleton.mjs`, job CI `build-and-deploy-kb`) est retirée de ce dépôt : `kb.hernandes.cloud` vit désormais dans son propre dépôt (`vh7383/kb.hernandes.cloud`), avec sa propre CI/CD indépendante. Raison : découplage jugé plus sain pour un site à la nature différente (généré depuis un vault externe, cadence de mise à jour propre) plutôt que de le faire porter par le pipeline du portfolio principal. Le certificat wildcard et la config nginx existants sur le Pi restent inchangés - seul le mécanisme de build/déploiement change de dépôt. Le postmortem du 2026-07-12 ci-dessus reste valable tel quel : il documente un incident réel survenu sous l'ancienne architecture.
+L'intégration Quartz embarquée (`kb/`, `scripts/export-kb-skeleton.mjs`, job CI `build-and-deploy-kb`) est retirée de ce dépôt : `kb.hernandes.cloud` vit désormais dans son propre dépôt (`vh7383/kb.hernandes.cloud`), avec sa propre CI/CD indépendante. Raison : découplage jugé plus sain pour un site à la nature différente (généré depuis un vault externe, cadence de mise à jour propre) plutôt que de le faire porter par le pipeline du portfolio principal. Le certificat wildcard et la config nginx existants sur le Pi restent inchangés - seul le mécanisme de build/déploiement change de dépôt.
 
 ## 2026-07-21 - NAS Synology reverse-proxifié : URLs sans port
 
@@ -302,3 +302,7 @@ Volontairement générique ici, cohérent avec la décision "`/infra` allégée"
 ## 2026-08-03 - Mickaël nommé dans le README (trio complet)
 
 Le README ne mentionnait jusque-là que Gabrielle et Raphaël dans sa description du chatbot - Mickaël (déjà public sur `/labia` via `PersonaGrid`) en était absent. Vincent a jugé le trio complet plus intéressant à présenter que Gabrielle seule. Bullet du README enrichie pour nommer les trois, en reprenant le même niveau personnalité/rôle perçu que sur `/labia` (Mickaël : "veille, pose des limites, intervient si besoin") - toujours aucun détail sur le mécanisme réel de véto, cohérent avec la décision du 2026-07-11 sur les personae cliquables.
+
+## 2026-08-03 - Retrait du postmortem kb.hernandes.cloud
+
+Vincent a jugé le postmortem du 2026-07-12 (déploiement CI/CD de `kb.hernandes.cloud`) plus pertinent à garder dans ce dépôt - `kb.hernandes.cloud` vit désormais dans son propre dépôt (cf. décision du 2026-07-19), l'incident documenté n'a plus grand rapport avec ce qui se déploie ici. Fichier `docs/postmortems/2026-07-12-kb-deploy-cicd.md` supprimé, dossier `docs/postmortems/` retiré (plus rien dedans), et les deux entrées de ce journal qui y renvoyaient (2026-07-12, 2026-07-19) débarrassées du lien mort - le résumé de l'incident reste lisible en ligne, seul le détail long est parti.
