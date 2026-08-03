@@ -288,3 +288,7 @@ Point d'attention pour le déploiement réel : `docker compose up -d` (recréati
 Retour sur la décision du 2026-07-10 : Vincent juge finalement l'ouverture automatique de `ChatWidget` à l'arrivée trop intrusive. `open` réinitialisé à `false` (le message d'accueil de Gabrielle ne s'affiche donc qu'après ouverture manuelle).
 
 Ajout d'un bouton "agrandir" (⤢/⤡) dans l'en-tête, à côté de fermer : bascule la fenêtre entre sa taille normale (`h-96 w-80`, 384×320px) et une taille double (`h-[48rem] w-[40rem]`, 768×640px, plafonnée à `85vh`/`90vw` pour rester utilisable sur petit écran). État `expanded` local au composant, non persisté.
+
+## 2026-08-03 - Bulle d'accueil de Gabrielle sur le bouton fermé
+
+Suite à la décision du 2026-07-28 (chat fermé par défaut), le bouton flottant seul risquait de passer inaperçu. Ajout d'une bulle (`showGreetingBubble`, `ChatWidget.tsx`) qui apparaît ~1,2s après l'arrivée sur la page, à gauche du bouton, invitant à cliquer pour discuter - se ferme au clic sur le bouton ✕ dédié ou dès que le chat s'ouvre, ne réapparaît pas ensuite. Texte affiné après relecture de Vincent : de "cliquez sur moi pour discuter :)" (trop sec, smiley texte) vers une formulation qui nomme Gabrielle directement et se termine par un vrai emoji (😊) plutôt qu'un smiley ASCII.
