@@ -18,7 +18,7 @@
   <a href="https://github.com/vh7383/hernandes.cloud/actions/workflows/deploy.yml"><img alt="Build and deploy" src="https://github.com/vh7383/hernandes.cloud/actions/workflows/deploy.yml/badge.svg"></a>
 </p>
 
-Ce dépôt est le code du site que j'utilise pour me présenter et exposer mon infra perso : portfolio (projets, expériences, engagements associatifs), hub vers mes services auto-hébergés (Nextcloud, Vaultwarden, Plex, photos, vidéosurveillance...), un chatbot d'accueil maison, et un tableau de bord de monitoring public - le tout déployé sur mon infra perso (VPS + serveur local).
+Ce dépôt est le code du site que j'utilise pour me présenter et exposer mon infra perso : portfolio (projets, expériences, engagements associatifs), hub vers mes services auto-hébergés (Nextcloud, Vaultwarden, Plex, photos, vidéosurveillance...), un chatbot d'accueil adossé à un système d'IA auto-hébergé que je maîtrise de bout en bout (Gabrielle), et un tableau de bord de monitoring public - le tout déployé sur mon infra perso (VPS + serveur local).
 
 Ce projet me sert aussi de terrain d'apprentissage : Next.js/React, et une méthode de travail avec documentation continue et décisions tracées au fil de l'eau - voir [`docs/`](./docs).
 
