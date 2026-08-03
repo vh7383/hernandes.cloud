@@ -32,10 +32,9 @@ export default function InfraPage() {
         </p>
         <ul className="mt-4 space-y-3 text-sm text-foreground/70">
           <li>
-            <strong className="text-foreground">Raspberry Pi</strong> - seule
-            machine exposée publiquement, allumée 24/7. Reverse proxy nginx,
-            ce site en conteneur Docker, quelques services auto-hébergés
-            (Nextcloud, Vaultwarden, Grafana, Plex).
+            <strong className="text-foreground">Serveur local</strong> -
+            allumé 24/7. Reverse proxy nginx, secours pour ce site, quelques
+            services auto-hébergés (Nextcloud, Vaultwarden, Grafana, Plex).
           </li>
           <li>
             <strong className="text-foreground">NAS Synology</strong> -
@@ -76,8 +75,8 @@ export default function InfraPage() {
       <section className="mt-10">
         <h2 className="text-xl font-semibold">Pourquoi ces choix</h2>
         <p className="mt-3 text-foreground/70">
-          Une seule machine exposée publiquement (le Pi), les autres réveillées
-          ou éteintes selon leur usage réel - pensé pour limiter la surface
+          Peu de machines exposées directement, les autres réveillées ou
+          éteintes selon leur usage réel - pensé pour limiter la surface
           d&apos;exposition, pas par souci de simplicité.
         </p>
       </section>

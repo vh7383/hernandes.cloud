@@ -19,7 +19,7 @@ export default function ServicesPage() {
         Applications que j&apos;auto-héberge sur mon infrastructure perso.
       </p>
 
-      <h2 className="mt-12 text-xl font-semibold">Raspberry Pi</h2>
+      <h2 className="mt-12 text-xl font-semibold">Serveur local</h2>
       <div className="mt-6 grid gap-6 sm:grid-cols-3">
         {piServices.map((service) => (
           <ServiceCard key={service.name} service={service} />

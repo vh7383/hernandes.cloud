@@ -18,7 +18,7 @@ export const projects: Project[] = [
     slug: "hernandes-cloud",
     title: "hernandes.cloud",
     description:
-      "Ce site lui-même : refonte complète en Next.js/React, avec chatbot maison et monitoring public, déployé sur mon propre Raspberry Pi.",
+      "Ce site lui-même : refonte complète en Next.js/React, avec chatbot maison et monitoring public, déployé sur mon infra perso.",
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Docker"],
     links: {
       repo: "https://github.com/vh7383/hernandes.cloud",
@@ -42,7 +42,7 @@ export const projects: Project[] = [
     slug: "infra-perso",
     title: "Infrastructure personnelle auto-hébergée",
     description:
-      "Raspberry Pi (24/7, reverse proxy + services), NAS Synology, Desktop et Kali réveillés à la demande : quatre machines, quatre rôles, une architecture pensée pour limiter la surface d'attaque plutôt que pour la simplicité.",
+      "Serveur local (24/7, reverse proxy + services), NAS Synology, Desktop et Kali réveillés à la demande : quatre machines, quatre rôles, une architecture pensée pour limiter la surface d'attaque plutôt que pour la simplicité.",
     stack: ["Docker", "Nginx", "Synology DSM", "Wake-on-LAN", "SSH"],
     links: { page: "/infra" },
     status: "active",

@@ -292,3 +292,9 @@ Ajout d'un bouton "agrandir" (⤢/⤡) dans l'en-tête, à côté de fermer : ba
 ## 2026-08-03 - Bulle d'accueil de Gabrielle sur le bouton fermé
 
 Suite à la décision du 2026-07-28 (chat fermé par défaut), le bouton flottant seul risquait de passer inaperçu. Ajout d'une bulle (`showGreetingBubble`, `ChatWidget.tsx`) qui apparaît ~1,2s après l'arrivée sur la page, à gauche du bouton, invitant à cliquer pour discuter - se ferme au clic sur le bouton ✕ dédié ou dès que le chat s'ouvre, ne réapparaît pas ensuite. Texte affiné après relecture de Vincent : de "cliquez sur moi pour discuter :)" (trop sec, smiley texte) vers une formulation qui nomme Gabrielle directement et se termine par un vrai emoji (😊) plutôt qu'un smiley ASCII.
+
+## 2026-08-03 - Infra distribuée : VPS comme point d'entrée par défaut, ancien serveur en secours
+
+L'infra a évolué depuis la mise en prod initiale (2026-07-06, cf. entrée ci-dessus) : un VPS sert désormais le trafic public par défaut, avec bascule automatique par DNS vers le serveur qui hébergeait initialement le site, désormais en rôle de secours (et proxy pour le réseau local) - retour automatique une fois le VPS rétabli. Les deux machines sont reliées par un mesh VPN auto-hébergé. Gabrielle (chatbot) tourne mieux sur le VPS et y a été basculée. Kali (poste de sécurité personnel, cf. décisions du 2026-07-06 et du 2026-07-21) est reliée en mesh VPN aux deux autres machines, mais reste gérée manuellement et jamais exposée publiquement.
+
+Volontairement générique ici, cohérent avec la décision "`/infra` allégée" du 2026-07-10 : les noms de technos utilisées (utile pour un lecteur recruteur) sont assumés, mais pas le détail exploitable (mécanique précise de bascule, ports, identifiants). `docs/architecture.md` et le README ont été mis à jour en conséquence - toute mention littérale du matériel d'origine ("Raspberry Pi") retirée des docs publiques, remplacée par "serveur local".
