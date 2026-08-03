@@ -20,7 +20,7 @@
 
 Ce dépôt est le code du site que j'utilise pour me présenter et exposer mon infra perso : portfolio (projets, expériences, engagements associatifs), hub vers mes services auto-hébergés (Nextcloud, Vaultwarden, Plex, photos, vidéosurveillance...), un chatbot d'accueil adossé à un système d'IA auto-hébergé que je maîtrise de bout en bout (Gabrielle), et un tableau de bord de monitoring public - le tout déployé sur mon infra perso (VPS + serveur local).
 
-Ce projet me sert aussi de terrain d'apprentissage : Next.js/React, et une méthode de travail avec documentation continue et décisions tracées au fil de l'eau - voir [`docs/`](./docs).
+Ce projet me sert surtout de terrain d'apprentissage pour la gestion en conditions réelles d'un domaine public - infra, sécurité, méthode de travail avec documentation continue et décisions tracées au fil de l'eau (voir [`docs/`](./docs)) - Next.js/React n'en étant qu'un des vecteurs.
 
 ## Fonctionnalités
 
