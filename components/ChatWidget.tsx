@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import PersonaHUD, { PERSONA_SIGIL_SRC, type PersonaEtat, type PersonaKey } from "@/components/PersonaHUD";
 
@@ -21,6 +21,12 @@ type Phase = "idle" | "sending" | "error";
 
 const GREETING =
   "Je suis Gabrielle, mon rôle est de vous accueillir mais je suis loin de tout savoir - pas un oracle. Je peux parler du profil et des projets de Vincent, sans accès à aucun outil réel.";
+
+const GREETING_BUBBLE = "Bonjour ! Je suis Gabrielle, je suis là pour vous accueillir et discuter, si vous voulez 😊";
+
+// Petit délai avant d'afficher la bulle d'accueil, pour laisser la page se
+// poser avant d'interpeller le visiteur.
+const GREETING_BUBBLE_DELAY_MS = 1200;
 
 // Ephemere par onglet (sessionStorage, pas localStorage) : coherent avec un
 // chat d'accueil sans compte, pas besoin de survivre entre deux visites.
@@ -67,7 +73,13 @@ export default function ChatWidget() {
   const [justReplied, setJustReplied] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [session] = useState<string>(getOrCreateSession);
+  const [showGreetingBubble, setShowGreetingBubble] = useState(false);
   const parleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowGreetingBubble(true), GREETING_BUBBLE_DELAY_MS);
+    return () => clearTimeout(timeout);
+  }, []);
 
   // L'état animé (pense/parle/alerte) ne reflète une vraie activité que pour
   // Gabrielle - Raphaël et Mickaël n'ont rien à traiter, donc restent idle.
@@ -269,18 +281,55 @@ export default function ChatWidget() {
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className={
-          open
-            ? "flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
-            : "flex h-14 w-14 items-center justify-center rounded-full transition-transform hover:scale-105"
-        }
-        aria-label={open ? "Fermer le chat" : `Ouvrir le chat avec ${PERSONA_NAMES[activePersona]}`}
-      >
-        {open ? "✕" : <PersonaHUD persona={activePersona} etat={etat} size={42} />}
-      </button>
+      <div className="relative">
+        {showGreetingBubble && !open && (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              setOpen(true);
+              setShowGreetingBubble(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                setOpen(true);
+                setShowGreetingBubble(false);
+              }
+            }}
+            style={{ animation: "persona-reveal 300ms ease-out both" }}
+            className="absolute bottom-1 right-16 w-64 cursor-pointer rounded-2xl rounded-br-none border border-border bg-surface px-3 py-2 text-sm text-foreground shadow-lg"
+          >
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowGreetingBubble(false);
+              }}
+              aria-label="Fermer la bulle"
+              className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full border border-border bg-background text-xs text-foreground/60 hover:text-foreground"
+            >
+              ✕
+            </button>
+            {GREETING_BUBBLE}
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={() => {
+            setOpen((v) => !v);
+            setShowGreetingBubble(false);
+          }}
+          className={
+            open
+              ? "flex h-14 w-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg transition-transform hover:scale-105"
+              : "flex h-14 w-14 items-center justify-center rounded-full transition-transform hover:scale-105"
+          }
+          aria-label={open ? "Fermer le chat" : `Ouvrir le chat avec ${PERSONA_NAMES[activePersona]}`}
+        >
+          {open ? "✕" : <PersonaHUD persona={activePersona} etat={etat} size={42} />}
+        </button>
+      </div>
     </div>
   );
 }
