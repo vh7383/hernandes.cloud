@@ -73,10 +73,7 @@ export default function LabiaPage() {
           Ce n&apos;est pas un produit fini : c&apos;est un terrain
           d&apos;expérimentation où j&apos;explore l&apos;observabilité avant la
           fiabilité, et où je préfère comprendre en profondeur avant
-          d&apos;automatiser. Le chatbot que vous croisez sur ce site
-          (&laquo;&nbsp;Gabrielle&nbsp;&raquo;, le rôle d&apos;accueil que je lui
-          fais jouer ici) en est une version volontairement bridée - aucun outil,
-          aucun accès réel.
+          d&apos;automatiser.
         </p>
         <p className="mt-3 text-foreground/70">
           Au-delà du technique, c&apos;est surtout un travail méthodique sur ce
@@ -112,9 +109,20 @@ export default function LabiaPage() {
           multimodale - et LabIA comme un véritable écosystème plutôt qu&apos;un
           seul agent.
         </p>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-xl font-semibold">Gabrielle, Raphaël, Mickaël</h2>
         <p className="mt-3 text-foreground/70">
-          Gabrielle n&apos;est pas seule dans la maison. Cliquer sur eux pour
-          en savoir plus.
+          AlicIA est mon projet IA le plus avancé : autonomie, outils, accès
+          réel à mes fichiers. Le trio ci-dessous, c&apos;est autre chose - une
+          implémentation plus personnelle, et surtout plus maîtrisée : trois
+          rôles séparés, où c&apos;est toujours le code qui décide, jamais le
+          modèle. C&apos;est cette maîtrise qui me permet de l&apos;exposer
+          directement sur le site, contrairement à AlicIA.
+        </p>
+        <p className="mt-3 text-foreground/70">
+          Cliquer sur eux pour en savoir plus.
         </p>
         <PersonaGrid />
       </section>
