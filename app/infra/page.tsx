@@ -5,10 +5,10 @@ import Mermaid from "@/components/Mermaid";
 
 const infraDistribueeDiagram = `flowchart TD
     Internet["Internet"] --> DNS["DNS hernandes.cloud<br/>bascule automatique"]
-    DNS -->|"défaut"| VPS["VPS<br/>nginx + TLS<br/>site + API Gabrielle"]
-    DNS -.->|"secours si le VPS tombe"| Local["Serveur local<br/>proxy LAN + monitoring"]
-    VPS <-->|"mesh VPN"| Local
-    VPS -.->|"mesh VPN, privé"| Kali["Kali<br/>poste sécurité<br/>jamais exposée"]
+    DNS -->|"défaut"| Server["Serveur<br/>proxy + TLS<br/>site + API Gabrielle"]
+    DNS -.->|"secours en cas de panne"| Local["Serveur local<br/>proxy LAN + monitoring"]
+    Server <-->|"mesh VPN"| Local
+    Server -.->|"mesh VPN, privé"| Kali["Poste sécurité<br/>jamais exposée"]
     Local -.->|"mesh VPN, privé"| Kali
 `;
 
@@ -67,7 +67,7 @@ export default function InfraPage() {
         <h2 className="text-xl font-semibold">Topologie réseau</h2>
         <p className="mt-3 text-foreground/70">
           Ce schéma ne couvre que mon réseau local (le homelab) - la partie
-          distribuée (VPS, bascule automatique) est détaillée dans
+          distribuée (bascule automatique entre serveurs) est détaillée dans
           « Déploiement et résilience » plus bas. Généré par un script perso
           qui découvre le LAN, plutôt que dessiné à la main - routeur,
           switch, WiFi, et ce qui est branché derrière. Noms et adresses
@@ -97,11 +97,12 @@ export default function InfraPage() {
         <h2 className="text-xl font-semibold">Déploiement et résilience</h2>
         <p className="mt-3 text-foreground/70">
           Le point d&apos;entrée public n&apos;est plus une seule machine mais
-          une propriété du DNS : un VPS sert le trafic par défaut - le site
-          et l&apos;API du chatbot Gabrielle - avec bascule automatique vers
-          le serveur local en secours si le VPS tombe, et retour automatique
-          une fois celui-ci rétabli. Les deux machines restent reliées en
-          permanence par un mesh VPN auto-hébergé, mon poste de sécurité.
+          une propriété du DNS : un serveur sert le trafic par défaut - le
+          site et l&apos;API du chatbot Gabrielle - avec bascule automatique
+          vers le serveur local en secours en cas de panne, et retour
+          automatique une fois le service rétabli. Les deux machines restent
+          reliées en permanence par un mesh VPN auto-hébergé, mon poste de
+          sécurité.
         </p>
         <p className="mt-3 text-foreground/70">
           Le déploiement suit un pipeline CI/CD déclenché à
