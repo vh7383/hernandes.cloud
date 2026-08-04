@@ -22,7 +22,7 @@ export default function InfraPage() {
       <h1 className="text-3xl font-bold tracking-tight">Mon infrastructure</h1>
       <p className="mt-4 text-foreground/70">
         hernandes.cloud n&apos;est pas juste un site : c&apos;est la porte
-        d&apos;entrée d&apos;un petit système auto-hébergé, chez moi. Cette
+        d&apos;entrée de mon petit système auto-hébergé. Cette
         page explique comment il est construit, et pourquoi - les services
         eux-mêmes sont visibles en direct sur{" "}
         <Link href="/services" className="text-brand hover:underline">
@@ -66,12 +66,14 @@ export default function InfraPage() {
       <section className="mt-10">
         <h2 className="text-xl font-semibold">Topologie réseau</h2>
         <p className="mt-3 text-foreground/70">
-          Générée par un script perso qui découvre le LAN, plutôt que
-          dessinée à la main - routeur, switch, WiFi, et ce qui est branché
-          derrière. Noms et adresses réels remplacés par des rôles génériques.
-          Le pont domotique pilote aussi de l&apos;éclairage en Zigbee,
-          un réseau à part, invisible depuis le LAN - d&apos;où le trait en
-          pointillés.
+          Ce schéma ne couvre que mon réseau local (le homelab) - la partie
+          distribuée (VPS, bascule automatique) est détaillée dans
+          « Déploiement et résilience » plus bas. Généré par un script perso
+          qui découvre le LAN, plutôt que dessiné à la main - routeur,
+          switch, WiFi, et ce qui est branché derrière. Noms et adresses
+          réels remplacés par des rôles génériques. Le pont domotique pilote
+          aussi de l&apos;éclairage en Zigbee, un réseau à part, invisible
+          depuis le LAN - d&apos;où le trait en pointillés.
         </p>
         <Image
           src="/images/infra/network-topology.svg"
