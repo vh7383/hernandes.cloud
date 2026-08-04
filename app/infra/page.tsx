@@ -1,6 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import Mermaid from "@/components/Mermaid";
+
+const infraDistribueeDiagram = `flowchart TD
+    Internet["Internet"] --> DNS["DNS hernandes.cloud<br/>bascule automatique"]
+    DNS -->|"défaut"| VPS["VPS<br/>nginx + TLS<br/>site + API Gabrielle"]
+    DNS -.->|"secours si le VPS tombe"| Local["Serveur local<br/>proxy LAN + monitoring"]
+    VPS <-->|"mesh VPN"| Local
+    VPS -.->|"mesh VPN, privé"| Kali["Kali<br/>poste sécurité<br/>jamais exposée"]
+    Local -.->|"mesh VPN, privé"| Kali
+`;
 
 export const metadata: Metadata = {
   title: "Infrastructure - hernandes.cloud",
@@ -28,7 +38,7 @@ export default function InfraPage() {
       <section className="mt-10">
         <h2 className="text-xl font-semibold">Vue d&apos;ensemble</h2>
         <p className="mt-3 text-foreground/70">
-          Quatre rôles, quatre machines, chacune avec un usage précis :
+          Plusieurs rôles, plusieurs machines, chacune avec un usage précis :
         </p>
         <ul className="mt-4 space-y-3 text-sm text-foreground/70">
           <li>
@@ -79,6 +89,31 @@ export default function InfraPage() {
           éteintes selon leur usage réel - pensé pour limiter la surface
           d&apos;exposition, pas par souci de simplicité.
         </p>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-xl font-semibold">Déploiement et résilience</h2>
+        <p className="mt-3 text-foreground/70">
+          Le point d&apos;entrée public n&apos;est plus une seule machine mais
+          une propriété du DNS : un VPS sert le trafic par défaut - le site
+          et l&apos;API du chatbot Gabrielle - avec bascule automatique vers
+          le serveur local en secours si le VPS tombe, et retour automatique
+          une fois celui-ci rétabli. Les deux machines restent reliées en
+          permanence par un mesh VPN auto-hébergé, dont Kali (mon poste de
+          sécurité) fait aussi partie - jamais un point d&apos;entrée public,
+          toujours gérée à la main.
+        </p>
+        <p className="mt-3 text-foreground/70">
+          Le déploiement suit un pipeline CI/CD (GitHub Actions) déclenché à
+          chaque push sur la branche principale : build d&apos;images Docker
+          multi-architecture sur des runners natifs, publication sur un
+          registre de conteneurs, puis mise à jour automatisée de la machine
+          cible. Comme pour le reste de cette page, la mécanique précise de
+          bascule (ports, identifiants, scripts) n&apos;est pas détaillée ici
+          - l&apos;idée est de montrer les choix, pas de documenter une cible
+          d&apos;attaque.
+        </p>
+        <Mermaid chart={infraDistribueeDiagram} />
       </section>
     </div>
   );
