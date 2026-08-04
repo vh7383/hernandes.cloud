@@ -101,12 +101,10 @@ export default function InfraPage() {
           et l&apos;API du chatbot Gabrielle - avec bascule automatique vers
           le serveur local en secours si le VPS tombe, et retour automatique
           une fois celui-ci rétabli. Les deux machines restent reliées en
-          permanence par un mesh VPN auto-hébergé, dont Kali (mon poste de
-          sécurité) fait aussi partie - jamais un point d&apos;entrée public,
-          toujours gérée à la main.
+          permanence par un mesh VPN auto-hébergé, mon poste de sécurité.
         </p>
         <p className="mt-3 text-foreground/70">
-          Le déploiement suit un pipeline CI/CD (GitHub Actions) déclenché à
+          Le déploiement suit un pipeline CI/CD déclenché à
           chaque push sur la branche principale : build d&apos;images Docker
           multi-architecture sur des runners natifs, publication sur un
           registre de conteneurs, puis mise à jour automatisée de la machine
