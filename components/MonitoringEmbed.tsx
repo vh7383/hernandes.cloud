@@ -7,10 +7,19 @@ function PlaceholderCard({ message }: { message: string }) {
 }
 
 // Dashboard Grafana public (PLG sur le Pi, cf. docs/architecture.md) : URL
-// fournie par une simple variable d'env, sans redeploy de code.
-export default function MonitoringEmbed({ available }: { available: boolean }) {
-  const embedUrl = process.env.NEXT_PUBLIC_MONITORING_EMBED_URL;
-
+// fournie par une simple variable d'env, sans redeploy de code. `embedUrl`
+// est passée par l'appelant plutôt que lue ici, pour permettre plusieurs
+// tableaux de bord (métriques, logs...) sur la même page via des variables
+// d'env distinctes.
+export default function MonitoringEmbed({
+  available,
+  embedUrl,
+  title,
+}: {
+  available: boolean;
+  embedUrl: string | undefined;
+  title: string;
+}) {
   if (!available) {
     return (
       <PlaceholderCard message="Le tableau de bord est temporairement indisponible." />
@@ -28,7 +37,7 @@ export default function MonitoringEmbed({ available }: { available: boolean }) {
       src={embedUrl}
       className="h-[600px] w-full rounded-lg border border-border"
       loading="lazy"
-      title="Tableau de bord monitoring"
+      title={title}
     />
   );
 }

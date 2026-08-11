@@ -31,9 +31,22 @@ export default async function MonitoringPage() {
         ))}
       </div>
 
-      <h2 className="mt-12 text-xl font-semibold">Tableau de bord</h2>
+      <h2 className="mt-12 text-xl font-semibold">Tableau de bord — Métriques</h2>
       <div className="mt-4">
-        <MonitoringEmbed available={monitoringStatus === "up"} />
+        <MonitoringEmbed
+          available={monitoringStatus === "up"}
+          embedUrl={process.env.NEXT_PUBLIC_MONITORING_EMBED_URL}
+          title="Tableau de bord monitoring"
+        />
+      </div>
+
+      <h2 className="mt-12 text-xl font-semibold">Tableau de bord — Logs</h2>
+      <div className="mt-4">
+        <MonitoringEmbed
+          available={monitoringStatus === "up"}
+          embedUrl={process.env.NEXT_PUBLIC_MONITORING_LOGS_EMBED_URL}
+          title="Tableau de bord logs"
+        />
       </div>
     </div>
   );
