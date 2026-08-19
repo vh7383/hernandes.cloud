@@ -76,7 +76,7 @@ jobs:
             ghcr.io/vh7383/hernandes.cloud:sha-${{ github.sha }}-arm64 \
             ghcr.io/vh7383/hernandes.cloud:sha-${{ github.sha }}-amd64
 
-  deploy:
+  deploy-pi:
     needs: merge-manifest
     runs-on: ubuntu-latest
     steps:
@@ -86,6 +86,21 @@ jobs:
           host: ${{ secrets.PI_HOST }}
           username: ${{ secrets.PI_USER }}
           key: ${{ secrets.PI_SSH_KEY }}
+          script: |
+            cd /opt/hernandes-cloud
+            docker compose pull
+            docker compose up -d
+
+  deploy-vps:
+    needs: merge-manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déployer sur le VPS via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /opt/hernandes-cloud
             docker compose pull
